@@ -1,4 +1,4 @@
-NAME	=	RTv1
+NAME	=	RT
 
 #compiler
 CC	=	gcc
