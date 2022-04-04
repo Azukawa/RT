@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:58:06 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/04 21:30:25 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,7 @@ void	raytracer(t_rt *rt, int i)
 		return ;
 	ray.start = v_add(ray.start, v_mult(ray.dir, t));
 	calculate_lighting(rt, &ray, cur_obj, &color);
+	if (rt->keys.is_grayscale)
+		color = convert_to_grayscale(color);
 	draw_pixel(rt->sx, rt->sy, &rt->rend.win_buffer, color);
 }

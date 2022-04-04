@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RTv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:58:55 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/04 21:28:36 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ typedef struct s_keys {
 	t_bool		fps_switch;
 	t_bool		mouse_switch;
 	t_bool		rot_switch;
+	t_bool		is_grayscale;
 }				t_keys;
 
 //superstruct that holds all the subsystem structs.
@@ -222,5 +223,7 @@ char		*ft_strdup(const char *s1);
 char		*ft_strjoin(char const *s1, char const *s2);
 void		ft_strdel(char **as);
 char		*ft_strndup(const char *s1, size_t n);
+uint32_t	convert_to_grayscale(uint32_t c);
+int			create_bmp(char *filename, t_buffer *i);
 
 #endif

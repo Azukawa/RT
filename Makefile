@@ -27,12 +27,14 @@ SRC_LIST = draw_pixel.c \
 		help_functions.c \
 		help_functions_2.c \
 		help_functions_3.c \
-		get_next_line.c
+		get_next_line.c \
+		grayscale.c \
+		bmp_screencap.c
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
 OBJS = $(addprefix $(OBJ_DIR),$(SRC_LIST:.c=.o))
 
 #SDL2
-SDL_SRC_DIR = SDL2-2.0.14
+SDL_SRC_DIR = SDL2-2.0.20
 SDL_DIR = libSDL2
 SDL_BUILD_DIR_PATH = $(CURDIR)/$(SDL_DIR)
 SDL_CFLAGS = `$(SDL_DIR)/bin/sdl2-config --cflags --libs`
@@ -51,7 +53,7 @@ $(NAME): $(OBJS)
 
 $(SDL_BIN) :
 	echo "Extracting SDL archives..."
-	tar xzf SDL2-2.0.14.tar.gz
+	tar xzf SDL2-2.0.20.tar.gz
 	mkdir -p $(SDL_DIR)
 	cd $(SDL_SRC_DIR); ./configure --prefix=$(SDL_BUILD_DIR_PATH); make -j6; make install
 

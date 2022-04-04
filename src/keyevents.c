@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyevents.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/03/29 12:42:43 by alero            ###   ########.fr       */
+/*   Updated: 2022/04/04 21:34:05 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 			if (e->key.keysym.sym == SDLK_ESCAPE)
 				rt->rend.run = FALSE;
 			rt->cam.dir = v_rot_xyz(rt->cam.dir, rt->cam.rot);
+			if (e->key.keysym.sym == SDLK_g)
+				rt->keys.is_grayscale = (rt->keys.is_grayscale ? FALSE : TRUE);
+			if (e->key.keysym.sym == SDLK_p)
+				create_bmp("RT screencap.bmp", &rt->rend.win_buffer);
 		}
 		else if (e->type == SDL_WINDOWEVENT \
 		&& e->window.event == SDL_WINDOWEVENT_CLOSE)
