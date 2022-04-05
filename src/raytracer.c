@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/04 21:30:25 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/05 17:46:55 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@ int cur_obj)
 	return (FALSE);
 }
 
-static uint32_t	assign_color(t_rt *rt, float lambert, t_material mat)
+static uint32_t    assign_color(t_rt *rt, float lambert, t_material mat)
 {
-	t_fvector	col;
+    t_fvector    col;
 
-	col.x = lambert * rt->object[9].intensity.red * mat.diffuse.red;
-	col.y = lambert * rt->object[9].intensity.green * mat.diffuse.green;
-	col.z = lambert * rt->object[9].intensity.blue * mat.diffuse.blue;
-	return (get_color2(ft_fmin(col.x * 255.0f, 255.0f), ft_fmin(col.y * 255.0f,
-				255.0f), ft_fmin(col.z * 255.0f, 255.0f)));
+    col.x = lambert * rt->object[9].intensity.red * mat.diffuse.red;
+    col.y = lambert * rt->object[9].intensity.green * mat.diffuse.green;
+    col.z = lambert * rt->object[9].intensity.blue * mat.diffuse.blue;
+	col.x = fmax(col.x, rt->light[0].amb_col.red);
+	col.y = fmax(col.y, rt->light[0].amb_col.green);
+	col.z = fmax(col.z, rt->light[0].amb_col.blue);
+    return (get_color2(ft_fmin(col.x * 255.0f, 255.0f), ft_fmin(col.y * 255.0f, 255.0f), ft_fmin(col.z * 255.0f, 255.0f)));
 }
 
 static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj,
@@ -83,6 +85,10 @@ void	raytracer(t_rt *rt, int i)
 	{
 		if (ray_object_intersect(&ray, &rt->object[i], &t))
 			cur_obj = i;
+		color = assign_color(rt,  rt->light[0].amb_int, rt->material[rt->object[cur_obj].material]);
+		rt->light[0].amb_col.red = rt->material[rt->object[cur_obj].material].diffuse.red * rt->light[0].amb_int;
+		rt->light[0].amb_col.green = rt->material[rt->object[cur_obj].material].diffuse.green * rt->light[0].amb_int;
+		rt->light[0].amb_col.blue = rt->material[rt->object[cur_obj].material].diffuse.blue * rt->light[0].amb_int;
 		i++;
 	}
 	if (draw_light(&ray, rt, &t))

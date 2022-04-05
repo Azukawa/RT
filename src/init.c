@@ -6,7 +6,7 @@
 /*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 20:02:27 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:58:06 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/05 17:28:47 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	init_light(t_rt *rt)
 	rt->light[0].intensity.red = 0.1;
 	rt->light[0].intensity.green = 0.1;
 	rt->light[0].intensity.blue = 0.1;
+	rt->light[0].amb_int = 0.2;
 }
 
 void	init_player(t_rt *rt)

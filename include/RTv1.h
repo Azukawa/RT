@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/04 21:28:36 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/05 17:22:41 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ typedef struct s_sphere{
 typedef struct s_light{
 	t_color		intensity;
 	t_fvector	pos;
+	t_color		amb_col;
+	float		amb_int;
 
 }				t_light;
 
@@ -214,6 +216,7 @@ t_bool		parse_c_pos(t_rt *rt, char *str);
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
 int			ft_clamp_i(int value, int min, int max);
+float		ft_clamp_f(float value, float min, float max);
 void		ft_bzero(void *s, size_t n);
 void		*ft_memalloc(size_t size);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
