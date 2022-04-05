@@ -6,7 +6,8 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/05 17:22:41 by alero            ###   ########.fr       */
+/*   Updated: 2022/04/05 17:50:26 by alero            ###   ########.fr       */
+/*   Updated: 2022/04/05 16:19:23 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,5 +229,9 @@ void		ft_strdel(char **as);
 char		*ft_strndup(const char *s1, size_t n);
 uint32_t	convert_to_grayscale(uint32_t c);
 int			create_bmp(char *filename, t_buffer *i);
+uint32_t	col_to_uint(t_color color);
+t_color		col_lerp(t_color c1, t_color c2, float p);
+t_color		col_blend(t_color base, t_color mix, float p);
+t_color		col_multiply(t_color color, float m);
 
 #endif
