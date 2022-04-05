@@ -29,7 +29,8 @@ SRC_LIST = draw_pixel.c \
 		help_functions_3.c \
 		get_next_line.c \
 		grayscale.c \
-		bmp_screencap.c
+		bmp_screencap.c \
+		color_manip.c
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
 OBJS = $(addprefix $(OBJ_DIR),$(SRC_LIST:.c=.o))
 
@@ -42,7 +43,7 @@ SDL_BIN = $(SDL_DIR)/lib/libSDL2.a
 
 .PHONY: all clean fclean re
 
-all: $(LIBFT) $(SDL_BIN) $(NAME)
+all: $(SDL_BIN) $(NAME)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 	mkdir -p $(OBJ_DIR)
@@ -64,5 +65,4 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(SDL_SRC_DIR)
-	rm -rf $(SDL_DIR)
 re: fclean all
