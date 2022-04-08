@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 20:02:27 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/05 17:28:47 by alero            ###   ########.fr       */
+/*   Updated: 2022/04/09 01:19:31 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_light(t_rt *rt)
 	rt->light[0].intensity.green = 0.1;
 	rt->light[0].intensity.blue = 0.1;
 	rt->light[0].amb_int = 0.2;
+	rt->ambl = (t_color){0, 25 / 255.f, 50 / 255.f}; //DEBUG COLOR (t_color){83 / 255.f, 227 / 255.f, 106 / 255.f};
 }
 
 void	init_player(t_rt *rt)

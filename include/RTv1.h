@@ -6,10 +6,10 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/05 17:50:26 by alero            ###   ########.fr       */
-/*   Updated: 2022/04/05 16:19:23 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/08 20:48:22 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef RTV1_H
 # define RTV1_H
@@ -158,6 +158,7 @@ typedef struct s_rt {
 	char		scene[100][100];
 	int			scene_len;
 	float		t;
+	t_color		ambl;
 }				t_rt;
 
 uint32_t	color_lerp(uint32_t c1, uint32_t c2, double p);

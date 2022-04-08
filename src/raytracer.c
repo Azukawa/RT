@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/05 17:46:55 by alero            ###   ########.fr       */
+/*   Updated: 2022/04/09 01:36:52 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,37 @@ int cur_obj)
 	return (FALSE);
 }
 
-static uint32_t    assign_color(t_rt *rt, float lambert, t_material mat)
+/*
+*	[Mat] is the current object material data.
+*	[lambert] is the dot product angle between current object and given light.
+*/
+static uint32_t	assign_color(t_rt *rt, float lambert, t_material mat)
 {
-    t_fvector    col;
+	/*
+	t_fvector	col;
 
-    col.x = lambert * rt->object[9].intensity.red * mat.diffuse.red;
-    col.y = lambert * rt->object[9].intensity.green * mat.diffuse.green;
-    col.z = lambert * rt->object[9].intensity.blue * mat.diffuse.blue;
+	col.x = lambert * rt->object[9].intensity.red * mat.diffuse.red;
+	col.y = lambert * rt->object[9].intensity.green * mat.diffuse.green;
+	col.z = lambert * rt->object[9].intensity.blue * mat.diffuse.blue;
 	col.x = fmax(col.x, rt->light[0].amb_col.red);
 	col.y = fmax(col.y, rt->light[0].amb_col.green);
 	col.z = fmax(col.z, rt->light[0].amb_col.blue);
-    return (get_color2(ft_fmin(col.x * 255.0f, 255.0f), ft_fmin(col.y * 255.0f, 255.0f), ft_fmin(col.z * 255.0f, 255.0f)));
+	return (get_color2(ft_fmin(col.x * 255.0f, 255.0f), ft_fmin(col.y * 255.0f, 255.0f), ft_fmin(col.z * 255.0f, 255.0f)));
+	*/
+	return (col_to_uint(col_blend(rt->ambl, mat.diffuse, lambert)));
 }
 
+/*
+*	[Ray] is the point of interception between ray & [cur_obj].
+*
+*	Note: rt->t exists to store length of the vector between interception point
+*	and the predetermined light source. Without light falloff etc. its not used.
+*/
 static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj,
 uint32_t *color)
 {
 	t_ray		lr;
-	float		t1;
+	//float		t1;
 	t_fvector	dist;
 	t_material	mat;
 	t_fvector	n;
@@ -54,16 +67,11 @@ uint32_t *color)
 	if (v_dot(n, ray->dir) > 0)
 		v_mult(n, -1);
 	mat = rt->material[rt->object[cur_obj].material];
-	dist = v_sub(rt->object[9].pos, ray->start);
-	if (v_dot(n, dist) <= 0)
-		return ;
-	t1 = sqrtf(v_dot(dist, dist));
-	if (t1 <= 0)
-		return ;
+	dist = v_sub(rt->object[9].pos, ray->start);	//distance of light
+	if (v_dot(n, dist) <= 0)						//not facing the light
+		return ;				//TODO: Calculate shadowed area color
 	lr.start = v_add(ray->start, v_mult(n, 0.05));
-	lr.dir = v_mult(dist, (1 / t1));
-	lr.dir = v_normalize(lr.dir);
-	rt->t = t1;
+	lr.dir = v_normalize(dist);
 	if (in_shadow(rt, lr, n, cur_obj))
 		return ;
 	*color = assign_color(rt, v_dot(lr.dir, n), mat);
@@ -85,16 +93,17 @@ void	raytracer(t_rt *rt, int i)
 	{
 		if (ray_object_intersect(&ray, &rt->object[i], &t))
 			cur_obj = i;
-		color = assign_color(rt,  rt->light[0].amb_int, rt->material[rt->object[cur_obj].material]);
+		color = col_to_uint(rt->ambl);	//Init object color to ambient light = not illuminated by any light source
+		//color = assign_color(rt,  rt->light[0].amb_int, rt->material[rt->object[cur_obj].material]);
 		rt->light[0].amb_col.red = rt->material[rt->object[cur_obj].material].diffuse.red * rt->light[0].amb_int;
 		rt->light[0].amb_col.green = rt->material[rt->object[cur_obj].material].diffuse.green * rt->light[0].amb_int;
 		rt->light[0].amb_col.blue = rt->material[rt->object[cur_obj].material].diffuse.blue * rt->light[0].amb_int;
 		i++;
 	}
 	if (draw_light(&ray, rt, &t))
-		return ;
+		return ;		//hit debug lightpoint, end casting
 	if (cur_obj == -1)
-		return ;
+		return ;		//no objects found, stay black
 	ray.start = v_add(ray.start, v_mult(ray.dir, t));
 	calculate_lighting(rt, &ray, cur_obj, &color);
 	if (rt->keys.is_grayscale)
