@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/05 16:10:54 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/09 11:51:54 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,15 @@ t_color	col_multiply(t_color color, float m)
 	result.red = clampf(color.red * m, 0.0f, 1.0f);
 	result.green = clampf(color.green * m, 0.0f, 1.0f);
 	result.blue = clampf(color.blue * m, 0.0f, 1.0f);
+	return (result);
+}
+
+t_color col_substract(t_color base, t_color mix, float p)
+{
+	t_color	result;
+
+	result.red = clampf(base.red - (p * mix.red), 0.0f, 1.0f);
+	result.green = clampf(base.green - (p * mix.green), 0.0f, 1.0f);
+	result.blue = clampf(base.blue - (p * mix.blue), 0.0f, 1.0f);
 	return (result);
 }

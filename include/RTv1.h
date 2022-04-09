@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/08 20:48:22 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/09 12:15:30 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,8 @@ typedef struct s_rt {
 	char		scene[100][100];
 	int			scene_len;
 	float		t;
-	t_color		ambl;
+	t_color		amb_l;
+	float		amb_p;
 }				t_rt;
 
 uint32_t	color_lerp(uint32_t c1, uint32_t c2, double p);
@@ -230,9 +231,11 @@ void		ft_strdel(char **as);
 char		*ft_strndup(const char *s1, size_t n);
 uint32_t	convert_to_grayscale(uint32_t c);
 int			create_bmp(char *filename, t_buffer *i);
+//COLOR
 uint32_t	col_to_uint(t_color color);
 t_color		col_lerp(t_color c1, t_color c2, float p);
 t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
+t_color		col_substract(t_color base, t_color mix, float p);
 
 #endif

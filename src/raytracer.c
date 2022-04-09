@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/09 01:36:52 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/09 12:33:14 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,13 @@ static uint32_t	assign_color(t_rt *rt, float lambert, t_material mat)
 	col.z = fmax(col.z, rt->light[0].amb_col.blue);
 	return (get_color2(ft_fmin(col.x * 255.0f, 255.0f), ft_fmin(col.y * 255.0f, 255.0f), ft_fmin(col.z * 255.0f, 255.0f)));
 	*/
-	return (col_to_uint(col_blend(rt->ambl, mat.diffuse, lambert)));
+	return (col_to_uint(col_blend(col_multiply(rt->amb_l, rt->amb_p), mat.diffuse, lambert)));
 }
 
 /*
 *	[Ray] is the point of interception between ray & [cur_obj].
+*	If a point is not directly illuminated or is in a shadow of another object,
+*	no new color is applied.
 *
 *	Note: rt->t exists to store length of the vector between interception point
 *	and the predetermined light source. Without light falloff etc. its not used.
@@ -66,14 +68,15 @@ uint32_t *color)
 	n = find_object_normal(&rt->object[cur_obj], ray);
 	if (v_dot(n, ray->dir) > 0)
 		v_mult(n, -1);
-	mat = rt->material[rt->object[cur_obj].material];
 	dist = v_sub(rt->object[9].pos, ray->start);	//distance of light
 	if (v_dot(n, dist) <= 0)						//not facing the light
-		return ;				//TODO: Calculate shadowed area color
+		return ;
 	lr.start = v_add(ray->start, v_mult(n, 0.05));
 	lr.dir = v_normalize(dist);
 	if (in_shadow(rt, lr, n, cur_obj))
 		return ;
+	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
+	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
 	*color = assign_color(rt, v_dot(lr.dir, n), mat);
 }
 
@@ -93,7 +96,7 @@ void	raytracer(t_rt *rt, int i)
 	{
 		if (ray_object_intersect(&ray, &rt->object[i], &t))
 			cur_obj = i;
-		color = col_to_uint(rt->ambl);	//Init object color to ambient light = not illuminated by any light source
+		color = col_to_uint(col_multiply(rt->amb_l, rt->amb_p));	//Init object color to ambient light = not illuminated by any light source
 		//color = assign_color(rt,  rt->light[0].amb_int, rt->material[rt->object[cur_obj].material]);
 		rt->light[0].amb_col.red = rt->material[rt->object[cur_obj].material].diffuse.red * rt->light[0].amb_int;
 		rt->light[0].amb_col.green = rt->material[rt->object[cur_obj].material].diffuse.green * rt->light[0].amb_int;
