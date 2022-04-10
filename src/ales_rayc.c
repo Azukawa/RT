@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ales_rayc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 21:00:01 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 21:00:08 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/10 18:37:41 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ void	iter_screen(t_rt *rt)
 void	ales_rayc(t_rt *rt)
 {
 	iter_screen(rt);
-	rt->run = FALSE;
+	rt->redraw = FALSE;
 }

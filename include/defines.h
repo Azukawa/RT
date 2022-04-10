@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:56:17 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:56:29 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/10 18:26:46 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 # define DEFINES_H
 
 //WINDOW
-# define WIN_W	400
-# define WIN_H	300
-# define WIN_HW 200
-# define WIN_HH 150
-# define WIN_NAME	"RTv1 build version 0.1"
+# define WIN_W	800
+# define WIN_H	600
+# define WIN_HW 400
+# define WIN_HH 300
+# define WIN_NAME	"esukava/eniini interactive raytracer ver. 0.1"
 
 typedef struct s_fvector {
 	float	x;

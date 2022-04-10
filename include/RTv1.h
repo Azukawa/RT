@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/09 12:15:30 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:36:54 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ typedef struct s_rt {
 	int			sx;
 	int			sy;
 	t_cam		cam;
-	t_bool		run;
+	t_bool		redraw;
 	char		scene[100][100];
 	int			scene_len;
 	float		t;

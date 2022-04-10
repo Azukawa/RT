@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   v_util_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:15:23 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 21:03:28 by esukava          ###   ########.fr       */
+/*   Updated: 2022/04/08 23:36:18 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ float	v_dot(t_fvector va, t_fvector vb)
 	return (va.x * vb.x + va.y * vb.y + va.z * vb.z);
 }
 
+/*
+*	Multiplying negative values with themselves will always result in positive
+*	values, therefore sqrt() call will always success.
+*	(Additionally, it does not trip onto possible NaN / Inf values.)
+*/
 float	v_len(t_fvector v)
 {
 	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));

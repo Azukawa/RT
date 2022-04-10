@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 20:02:27 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/09 12:26:04 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/10 18:37:24 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	init_player(t_rt *rt)
 	rt->cam.rot.y = 0;
 	rt->cam.rot.z = 0;
 	rt->object_count = 2;
-	rt->run = TRUE;
+	rt->redraw = TRUE;
 	rt->cam.up = v_normalize(v_cross(rt->cam.right, rt->cam.front));
 }
 
