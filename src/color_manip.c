@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/09 11:51:54 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/13 00:47:00 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,36 @@ t_color col_substract(t_color base, t_color mix, float p)
 {
 	t_color	result;
 
+	if (p == 0.0f)
+		return (base);
+	if (p == 1.0f)
+	{
+		result.red = clampf(base.red - mix.red, 0.0f, 1.0f);
+		result.green = clampf(base.green - mix.green, 0.0f, 1.0f);
+		result.blue = clampf(base.blue - mix.blue, 0.0f, 1.0f);
+		return (result);
+	}
 	result.red = clampf(base.red - (p * mix.red), 0.0f, 1.0f);
 	result.green = clampf(base.green - (p * mix.green), 0.0f, 1.0f);
 	result.blue = clampf(base.blue - (p * mix.blue), 0.0f, 1.0f);
+	return (result);
+}
+
+t_color col_add(t_color base, t_color mix, float p)
+{
+	t_color	result;
+
+	if (p == 0.0f)
+		return (base);
+	if (p == 1.0f)
+	{
+		result.red = clampf(base.red + mix.red, 0.0f, 1.0f);
+		result.green = clampf(base.green + mix.green, 0.0f, 1.0f);
+		result.blue = clampf(base.blue + mix.blue, 0.0f, 1.0f);
+		return (result);
+	}
+	result.red = clampf(base.red + (p * mix.red), 0.0f, 1.0f);
+	result.green = clampf(base.green + (p * mix.green), 0.0f, 1.0f);
+	result.blue = clampf(base.blue + (p * mix.blue), 0.0f, 1.0f);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/10 18:36:54 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/13 00:47:25 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,5 +237,6 @@ t_color		col_lerp(t_color c1, t_color c2, float p);
 t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
 t_color		col_substract(t_color base, t_color mix, float p);
+t_color		col_add(t_color base, t_color mix, float p);
 
 #endif

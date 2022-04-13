@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 20:02:27 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/10 18:37:24 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/13 12:43:51 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void	init_light(t_rt *rt)
 	rt->light[0].intensity.red = 0.1;
 	rt->light[0].intensity.green = 0.1;
 	rt->light[0].intensity.blue = 0.1;
-	rt->light[0].amb_int = 0.2;
+	rt->light[0].amb_int = 0.05;
 	rt->amb_l = (t_color){0, 25 / 255.f, 50 / 255.f}; //DEBUG COLOR (t_color){83 / 255.f, 227 / 255.f, 106 / 255.f};
-	rt->amb_p = 0.5f;
+	rt->amb_p = 0.2f;
 }
 
 void	init_player(t_rt *rt)

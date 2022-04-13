@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/10 19:43:38 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/13 17:40:19 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 	{
 		if (e->type == SDL_KEYDOWN)
 		{
-			if (e->key.keysym.sym == SDLK_w)
-				rt->object[9].pos.z -= 5;
-			if (e->key.keysym.sym == SDLK_a)
-				rt->object[9].pos.x -= 5;
-			if (e->key.keysym.sym == SDLK_s)
-				rt->object[9].pos.z += 5;
 			if (e->key.keysym.sym == SDLK_d)
+				rt->object[9].pos.z += 5;
+			if (e->key.keysym.sym == SDLK_w)
+				rt->object[9].pos.x -= 5;
+			if (e->key.keysym.sym == SDLK_a)
+				rt->object[9].pos.z -= 5;
+			if (e->key.keysym.sym == SDLK_s)
 				rt->object[9].pos.x += 5;
 			if (e->key.keysym.sym == SDLK_q)
 				rt->object[9].pos.y += 5;
