@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/13 16:46:59 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/18 15:00:46 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,40 +98,37 @@ uint32_t *color)
 	*color = assign_color(rt, lr, n, mat); //v_dot(lr.dir, n), mat);
 }
 
-void	raytracer(t_rt *rt, int i)
+void	raytracer(t_rt *rt, int x, int y)
 {
-	t_ray		ray;
+	int			i;
 	t_color		mixer;
 	uint32_t	color;
 	float		t;
 	int			cur_obj;
 
 	color = 0;
-	ray = ray_trough_screen(rt);
+	rt->ray_prime = init_ray(rt->altcam, (float)x / (WIN_W - 1), (float)y / WIN_H - 1);
+	//ray_trough_screen(rt, x, y);
 	t = 20000.0f;
 	cur_obj = -1;
 	i = 0;
 	while (i < rt->object_count)
 	{
-		if (ray_object_intersect(&ray, &rt->object[i], &t))
+		if (ray_object_intersect(&rt->ray_prime, &rt->object[i], &t))
 			cur_obj = i;
 		mixer = col_multiply(rt->material[rt->object[cur_obj].material].diffuse, rt->amb_p);
 		color = col_to_uint(col_blend(mixer, rt->amb_l, rt->amb_p));
 		rt->light[0].amb_col = col_blend(mixer, rt->amb_l, rt->amb_p);
-		//color = col_to_uint(col_blend(rt->material[rt->object[cur_obj].material].diffuse, rt->amb_l, rt->amb_p));	//Init object color to ambient light = not illuminated by any light source
-		//color = assign_color(rt,  rt->light[0].amb_int, rt->material[rt->object[cur_obj].material]);
-		//rt->light[0].amb_col.red = rt->material[rt->object[cur_obj].material].diffuse.red * rt->light[0].amb_int;
-		//rt->light[0].amb_col.green = rt->material[rt->object[cur_obj].material].diffuse.green * rt->light[0].amb_int;
-		//rt->light[0].amb_col.blue = rt->material[rt->object[cur_obj].material].diffuse.blue * rt->light[0].amb_int;
 		i++;
 	}
-	if (draw_light(&ray, rt, &t))
+	if (draw_light(rt, &t, x, y))
 		return ;		//hit debug lightpoint, end casting
 	if (cur_obj == -1)
 		return ;		//no objects found, stay black
-	ray.start = v_add(ray.start, v_mult(ray.dir, t));
-	calculate_lighting(rt, &ray, cur_obj, &color);
+	rt->ray_light.start = v_add(rt->ray_prime.start, v_mult(rt->ray_prime.dir, t));
+	rt->ray_light.dir = rt->ray_prime.dir;
+	calculate_lighting(rt, &rt->ray_light, cur_obj, &color);
 	if (rt->keys.is_grayscale)
 		color = convert_to_grayscale(color);
-	draw_pixel(rt->sx, rt->sy, &rt->rend.win_buffer, color);
+	draw_pixel(x, y, &rt->rend.win_buffer, color);
 }

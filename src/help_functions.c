@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 12:02:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/13 00:50:00 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/15 21:47:03 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	ft_clamp_i(int value, int min, int max)
 		value = max;
 	return (value);
 }
-
 
 float	ft_clamp_f(float value, float min, float max)
 {

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/13 00:47:25 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/19 00:34:51 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,20 @@ typedef struct s_cam{
 	t_fvector	up;
 }				t_cam;
 
+//dynamic lookfrom-lookat cam implementation
+typedef struct s_alt_cam {
+	t_fvector	pos;
+	t_fvector	dir;
+	t_fvector	h;
+	t_fvector	v;
+	t_fvector	llc;
+	t_fvector	rot;
+	t_fvector	mod_pos;
+	t_fvector	mod_dir;
+	t_fvector	rot_pos;
+	t_fvector	rot_dir;
+}				t_alt_cam;
+
 //Holds everything related directly to SDL's drawbuffer.
 typedef struct s_rend
 {
@@ -147,12 +161,7 @@ typedef struct s_rt {
 	t_cone		cone[5];
 	t_light		light[5];
 	t_object	object[10];
-	int			xvar;
-	int			yvar;
-	int			zvar;
 	int			object_count;
-	int			sx;
-	int			sy;
 	t_cam		cam;
 	t_bool		redraw;
 	char		scene[100][100];
@@ -160,6 +169,9 @@ typedef struct s_rt {
 	float		t;
 	t_color		amb_l;
 	float		amb_p;
+	t_ray		ray_prime;
+	t_ray		ray_light;
+	t_alt_cam	altcam;
 }				t_rt;
 
 uint32_t	color_lerp(uint32_t c1, uint32_t c2, double p);
@@ -185,9 +197,9 @@ t_bool		ray_plane_intersect(t_ray *r, t_object *p, float *t);
 t_bool		ray_sphere_intersect(t_ray *r, t_object *s, float *t);
 t_bool		ray_cyl_intersect(t_ray *r, t_object *obj, float *result);
 t_bool		ray_cone_intersect(t_ray *r, t_object *obj, float *result);
-t_ray		ray_trough_screen(t_rt *rt);
+void		ray_trough_screen(t_rt *rt, int x, int y);
 t_bool		ray_object_intersect(t_ray *ray, t_object *obj, float *t);
-t_bool		draw_light(t_ray *ray, t_rt *rt, float *t);
+t_bool		draw_light(t_rt *rt, float *t, int x, int y);
 void		v_rot_x(t_fvector *vec, float rad);
 void		v_rot_y(t_fvector *vec, float rad);
 void		v_rot_z(t_fvector *vec, float rad);
@@ -212,8 +224,7 @@ void		init_light(t_rt *rt);
 void		init_player(t_rt *rt);
 void		init(t_rt *rt);
 t_fvector	find_object_normal(t_object *object, t_ray *ray);
-void		cone_normal(t_fvector new_start, t_object *object, t_fvector *n);
-void		raytracer(t_rt *rt, int i);
+void		raytracer(t_rt *rt, int x, int y);
 t_bool		parse_c_dir(t_rt *rt, char *str);
 t_bool		parse_c_pos(t_rt *rt, char *str);
 int			ft_isdigit(int c);
@@ -238,5 +249,10 @@ t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
 t_color		col_substract(t_color base, t_color mix, float p);
 t_color		col_add(t_color base, t_color mix, float p);
-
+//alternative camera
+t_ray		init_ray(t_alt_cam cam, float u, float v);
+void		init_alt_cam(t_alt_cam *cam, t_fvector lookfrom, t_fvector lookat);
+//camera controls
+t_fvector	v_3d_p_rot(t_fvector rot_p, t_fvector pivot_p, t_fvector rot);
+t_fvector	v_3d_orig_rot(t_fvector point, t_fvector rot);
 #endif

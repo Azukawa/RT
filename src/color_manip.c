@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/13 00:47:00 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/15 21:32:54 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_color	col_multiply(t_color color, float m)
 	return (result);
 }
 
-t_color col_substract(t_color base, t_color mix, float p)
+t_color	col_substract(t_color base, t_color mix, float p)
 {
 	t_color	result;
 
@@ -114,7 +114,7 @@ t_color col_substract(t_color base, t_color mix, float p)
 	return (result);
 }
 
-t_color col_add(t_color base, t_color mix, float p)
+t_color	col_add(t_color base, t_color mix, float p)
 {
 	t_color	result;
 

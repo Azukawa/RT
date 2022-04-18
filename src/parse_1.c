@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:11:07 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/09 12:20:57 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/19 00:36:58 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,15 @@ t_bool	parse(char *str, t_rt *rt)
 		j++;
 		i++;
 	}
+
+	/*
+	*	Post-parse applied stuff (this does not work at init() funcs)
+	*/
+	init_alt_cam(&rt->altcam, rt->cam.pos, rt->cam.dir);
+	rt->altcam.rot = (t_fvector){0.0f, 0.0f, 0.0f};
+	rt->altcam.mod_pos = rt->cam.pos;
+	rt->altcam.mod_dir = rt->cam.dir;
+	rt->altcam.rot_dir = (t_fvector){0.0f, 0.0f, 0.0f};
+	rt->altcam.rot_pos = (t_fvector){0.0f, 0.0f, 0.0f};
 	return (TRUE);
 }
