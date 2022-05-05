@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/18 15:00:46 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/05 20:49:51 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj,
 uint32_t *color)
 {
 	t_ray		lr;
-	//float		t1;
 	t_fvector	dist;
 	t_material	mat;
 	t_fvector	n;
@@ -94,6 +93,9 @@ uint32_t *color)
 	if (in_shadow(rt, lr, n, cur_obj))
 		return ;
 	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
+	t_fvector sphere_uv = spherical_map(ray->start, ray->start, rt->object[cur_obj]);
+	//mat.diffuse = apply_texture(rt, sphere_uv.x, sphere_uv.y); //insane procedural texture creation
+	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, sphere_uv.x, sphere_uv.y), 0.5f);
 	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
 	*color = assign_color(rt, lr, n, mat); //v_dot(lr.dir, n), mat);
 }
@@ -107,8 +109,8 @@ void	raytracer(t_rt *rt, int x, int y)
 	int			cur_obj;
 
 	color = 0;
-	rt->ray_prime = init_ray(rt->altcam, (float)x / (WIN_W - 1), (float)y / WIN_H - 1);
-	//ray_trough_screen(rt, x, y);
+	//rt->ray_prime = init_ray(rt->altcam, (float)x / (WIN_W - 1), (float)y / WIN_H - 1);
+	ray_trough_screen(rt, x, y);
 	t = 20000.0f;
 	cur_obj = -1;
 	i = 0;
@@ -123,6 +125,8 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if (draw_light(rt, &t, x, y))
 		return ;		//hit debug lightpoint, end casting
+	//if (draw_debug_cam(rt, &t, x, y))
+	//	return ;
 	if (cur_obj == -1)
 		return ;		//no objects found, stay black
 	rt->ray_light.start = v_add(rt->ray_prime.start, v_mult(rt->ray_prime.dir, t));

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/19 00:42:02 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/25 11:19:50 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 				rt->rend.run = FALSE;
 			if (e->key.keysym.sym == SDLK_g)
 				rt->keys.is_grayscale = (rt->keys.is_grayscale ? FALSE : TRUE);
+			if (e->key.keysym.sym == SDLK_0)
+				rt->debug = (rt->debug ? FALSE : TRUE);
 			if (e->key.keysym.sym == SDLK_p)
 				create_bmp("RT screencap.bmp", &rt->rend.win_buffer);
 			if (e->key.keysym.sym == SDLK_m && rt->amb_p < 0.8f)
@@ -114,14 +116,19 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 			if (e->key.keysym.sym == SDLK_n && rt->amb_p > 0.2f)
 				rt->amb_p -= 0.05f;
 			// THIS NEEDS A BOOL TO BE HIT
-			init_alt_cam(&rt->altcam, rt->altcam.mod_pos, v_add(rt->altcam.mod_dir, v_sub(rt->altcam.mod_dir, rt->altcam.rot_dir)));
-			//
-			printf("lookfrom:\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n", \
-			rt->altcam.mod_pos.x, rt->altcam.mod_pos.y, rt->altcam.mod_pos.z);
-			printf("lookat:\t\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n", \
-			rt->altcam.mod_dir.x, rt->altcam.mod_dir.y, rt->altcam.mod_dir.z);
-			printf("rotation:\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n\n", \
-			rt->altcam.rot.x, rt->altcam.rot.y, rt->altcam.rot.z);
+			if (rt->debug)
+				init_alt_cam(&rt->altcam, rt->altcam.debug_pos, rt->altcam.debug_dir);
+			else
+			{
+				init_alt_cam(&rt->altcam, rt->altcam.mod_pos, v_add(rt->altcam.mod_dir, v_sub(rt->altcam.mod_dir, rt->altcam.rot_dir)));
+				//
+				printf("lookfrom:\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n", \
+				rt->altcam.mod_pos.x, rt->altcam.mod_pos.y, rt->altcam.mod_pos.z);
+				printf("lookat:\t\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n", \
+				rt->altcam.mod_dir.x, rt->altcam.mod_dir.y, rt->altcam.mod_dir.z);
+				printf("rotation:\tx[%+03.2f] y[%+03.2f] z[%+03.2f]\n\n", \
+				rt->altcam.rot.x, rt->altcam.rot.y, rt->altcam.rot.z);
+			}
 		}
 		else if (e->type == SDL_WINDOWEVENT \
 		&& e->window.event == SDL_WINDOWEVENT_CLOSE)

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/15 23:53:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/19 00:36:31 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/25 11:30:02 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	init_alt_cam(t_alt_cam *cam, t_fvector lookfrom, t_fvector lookat)
 	float		vfov;
 	float		ar;
 
-	vfov = 90;
+	vfov = 45;
 	ar = 4.0f / 3.0f;
 	theta = vfov * DEG_TO_RAD;
 	h = tanf(theta / 2.0f);

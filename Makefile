@@ -32,7 +32,8 @@ SRC_LIST = draw_pixel.c \
 		bmp_screencap.c \
 		color_manip.c \
 		projection.c \
-		v_rotation.c
+		v_rotation.c \
+		textures.c
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
 OBJS = $(addprefix $(OBJ_DIR),$(SRC_LIST:.c=.o))
 

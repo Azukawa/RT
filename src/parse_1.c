@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/18 11:11:07 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/19 00:36:58 by eniini           ###   ########.fr       */
+/*   Updated: 2022/04/28 16:36:35 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,13 @@ t_bool	parse(char *str, t_rt *rt)
 	rt->altcam.mod_dir = rt->cam.dir;
 	rt->altcam.rot_dir = (t_fvector){0.0f, 0.0f, 0.0f};
 	rt->altcam.rot_pos = (t_fvector){0.0f, 0.0f, 0.0f};
+	rt->altcam.debug_pos = (t_fvector){0, 0, -50};
+	rt->altcam.debug_dir = (t_fvector){0, 0, 0};
+	rt->altcam.vup = (t_fvector){0, 1, 0};
+	t_fvector w = v_normalize(rt->altcam.debug_dir);
+	if (w.x == 0 && w.y == -1 && w.z == 0)
+		rt->altcam.vup = (t_fvector){0, 0, -1};
+	rt->altcam.vside = v_normalize(v_cross(rt->altcam.vup, w));
+	rt->debug = FALSE;
 	return (TRUE);
 }
