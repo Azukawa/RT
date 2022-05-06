@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/05 20:16:13 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/06 09:56:54 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,8 @@ typedef struct s_rt {
 	t_ray		ray_light;
 	t_alt_cam	altcam;
 	t_bool		debug;
+	float		uv_u;
+	float		uv_v;
 }				t_rt;
 
 uint32_t	color_lerp(uint32_t c1, uint32_t c2, double p);
@@ -262,7 +264,7 @@ t_bool		draw_debug_cam(t_rt *rt, float *t, int x, int y);
 t_fvector	v_3d_p_rot(t_fvector rot_p, t_fvector pivot_p, t_fvector rot);
 t_fvector	v_3d_orig_rot(t_fvector point, t_fvector rot);
 //texturing
-t_fvector	spherical_map(t_fvector pos, t_fvector hit_point, t_object sphere);
+void		uv_map(t_rt *rt, t_ray *ray, int cur_obj);
 t_color		apply_check_pattern(t_rt *rt, float scale, float x, float y);
 t_color		apply_texture(t_rt *rt, float x, float y);
 #endif

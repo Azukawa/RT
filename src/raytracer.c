@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/05 20:49:51 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/06 10:51:25 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,12 @@ uint32_t *color)
 	if (in_shadow(rt, lr, n, cur_obj))
 		return ;
 	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
-	t_fvector sphere_uv = spherical_map(ray->start, ray->start, rt->object[cur_obj]);
-	//mat.diffuse = apply_texture(rt, sphere_uv.x, sphere_uv.y); //insane procedural texture creation
-	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, sphere_uv.x, sphere_uv.y), 0.5f);
+	uv_map(rt, ray, cur_obj);
+	//mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
+	if (rt->object[cur_obj].type == PLANE)
+		mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 1, rt->uv_u, rt->uv_v), 0.5f);
+	else
+		mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, rt->uv_u, rt->uv_v), 0.5f);
 	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
 	*color = assign_color(rt, lr, n, mat); //v_dot(lr.dir, n), mat);
 }

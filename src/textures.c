@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:33:42 by eniini            #+#    #+#             */
-/*   Updated: 2022/05/05 20:37:08 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/06 10:49:06 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 *	Returns a color corresponding to a checkered pattern. [Scale] directly
 *	corresponds to how many tiles are generated onto the plane.
 *
-*	note: dividing [y] by half is a hacky way to solve issues with aspect ratio.
+*	Note: scales higher than 1 don't work with planar mapping.
 */
 t_color	apply_check_pattern(t_rt *rt, float scale, float x, float y)
 {
@@ -24,7 +24,7 @@ t_color	apply_check_pattern(t_rt *rt, float scale, float x, float y)
 	t_bool	xresult;
 	t_bool	result;
 
-	y *= 0.5f;
+	//y *= 0.5f;
 	if (((y * scale) - floorf(y * scale)) < 0.5f)
 		yresult = TRUE;
 	else
@@ -40,6 +40,9 @@ t_color	apply_check_pattern(t_rt *rt, float scale, float x, float y)
 		return ((t_color){1,1,1});
 }
 
+/*
+*	TESTING
+*/
 t_color	apply_texture(t_rt *rt, float x, float y)
 {
 	float	a = 20.0f;
@@ -55,22 +58,51 @@ t_color	apply_texture(t_rt *rt, float x, float y)
 /*
 *	[pos] is assumed to be a point in the surface of the sphere.
 */
-t_fvector	spherical_map(t_fvector pos, t_fvector hit_point, t_object sphere)
+static void	spherical_map(t_rt *rt, t_fvector pos, t_fvector hp, t_object obj)
 {
-	float		theta = atan2f(pos.x, pos.z); //arctan2(pos.x, pos.z);
-	float		radius = v_len(v_sub(hit_point, sphere.pos));
- 	float		phi = acosf(pos.y / radius); // = arccos(pos.y / radius);
-	float		raw_u = theta / (2.0f * M_PI);
-	t_fvector	ret;
-	// 0 <= u < 1
-	// here's also where we fix the direction of u. Subtract it from 1,
-	// so that it increases counterclockwise as viewed from above.
-	ret.x = 1.0f - (raw_u + 0.5);
+	float	theta;
+	float	phi;
+	float	raw_u;
 
-	// we want v to be 0 at the south pole of the sphere,
-	// and 1 at the north pole, so we have to "flip it over"
-	// by subtracting it from 1.
-	ret.y = 1.0f - phi / M_PI;
-	ret.z = 0;
-	return (ret);
+	theta = atan2f(pos.x, pos.z);
+	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
+	phi = acosf(pos.y / v_len(v_sub(hp, obj.pos)));
+	rt->uv_v = 1.0f - (phi / M_PI);
+	rt->uv_v *= 0.5;
+}
+
+static void planar_map(t_rt *rt, t_fvector hp)
+{
+	rt->uv_u = fmodf(hp.x, 1.0f);
+	rt->uv_v = fmodf(hp.z, 1.0f);
+}
+
+static void	cylindrical_map(t_rt *rt, t_fvector pos)
+{
+	float	theta;
+	float	phi;
+	float	raw_u;
+
+	theta = atan2f(pos.x, pos.z);
+	//phi = acosf(pos.y / v_len(v_sub(hp, obj.pos)));
+	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
+	//rt->uv_v = 1.0f - (phi / M_PI);
+	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);
+	rt->uv_v *= 0.2;
+}
+
+void	uv_map(t_rt *rt, t_ray *ray, int cur_obj)
+{
+	if (rt->object[cur_obj].type == SPHERE)
+	{
+		spherical_map(rt, ray->start, ray->start, rt->object[cur_obj]);
+	}
+	if (rt->object[cur_obj].type == PLANE)
+	{
+		planar_map(rt, ray->start);
+	}
+	if (rt->object[cur_obj].type == CYL)
+	{
+		cylindrical_map(rt, ray->start);
+	}
 }
