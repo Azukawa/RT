@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/06 10:51:25 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/09 16:21:59 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,17 @@ int cur_obj)
 }
 
 /*
-*	Explanation taken from Khronos.org:
-*	For a given incident vector [I] and surface normal [N] reflect returns the
-*	reflection direction calculated as I - 2.0 * dot(N, I) * N.
-*	N should be normalized in order to achieve the desired result.
+*	Returns a vector representing the relfection direction given the
+*	incident (ray hitting a surface coming from a light source) [I] and surface
+*	normal [N] vectors.
+*	I - (2 * dot(N, I) * N).
 */
-static t_fvector	reflect(t_fvector vec_from_light, t_fvector normal)
+static t_fvector	reflect(t_fvector incident, t_fvector normal)
 {
-	return (v_sub(v_mult(vec_from_light, 2.0f * v_dot(normal, vec_from_light)), vec_from_light));
-	//return (v_sub(vec_from_light, v_mult(v_mult(normal,
-	//			v_dot(normal, vec_from_light)), 2.0f)));
+	float	difference;
+
+	difference = 2.0f * v_dot(normal, incident);
+	return (v_sub(v_mult(normal, difference), incident));
 }
 
 /*
@@ -95,10 +96,7 @@ uint32_t *color)
 	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
 	uv_map(rt, ray, cur_obj);
 	//mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
-	if (rt->object[cur_obj].type == PLANE)
-		mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 1, rt->uv_u, rt->uv_v), 0.5f);
-	else
-		mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, rt->uv_u, rt->uv_v), 0.5f);
+	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 5, rt->object[cur_obj]), 0.5f);
 	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
 	*color = assign_color(rt, lr, n, mat); //v_dot(lr.dir, n), mat);
 }

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:33:42 by eniini            #+#    #+#             */
-/*   Updated: 2022/05/06 10:49:06 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/09 22:35:17 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,20 @@
 /*
 *	Returns a color corresponding to a checkered pattern. [Scale] directly
 *	corresponds to how many tiles are generated onto the plane.
-*
-*	Note: scales higher than 1 don't work with planar mapping.
 */
-t_color	apply_check_pattern(t_rt *rt, float scale, float x, float y)
+t_color	apply_check_pattern(t_rt *rt, float scale, t_object obj)
 {
 	t_bool	yresult;
 	t_bool	xresult;
 	t_bool	result;
 
-	//y *= 0.5f;
-	if (((y * scale) - floorf(y * scale)) < 0.5f)
+	if (obj.type == PLANE)
+		scale = 1.0f;
+	if (((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
 		yresult = TRUE;
 	else
 		yresult = FALSE;
-	if (((x * scale) - floorf(x * scale)) < 0.5f)
+	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
 		xresult = TRUE;
 	else
 		xresult = FALSE;
@@ -62,7 +61,6 @@ static void	spherical_map(t_rt *rt, t_fvector pos, t_fvector hp, t_object obj)
 {
 	float	theta;
 	float	phi;
-	float	raw_u;
 
 	theta = atan2f(pos.x, pos.z);
 	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
@@ -80,15 +78,10 @@ static void planar_map(t_rt *rt, t_fvector hp)
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
 	float	theta;
-	float	phi;
-	float	raw_u;
 
 	theta = atan2f(pos.x, pos.z);
-	//phi = acosf(pos.y / v_len(v_sub(hp, obj.pos)));
 	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
-	//rt->uv_v = 1.0f - (phi / M_PI);
 	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);
-	rt->uv_v *= 0.2;
 }
 
 void	uv_map(t_rt *rt, t_ray *ray, int cur_obj)

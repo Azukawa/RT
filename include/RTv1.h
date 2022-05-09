@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/06 09:56:54 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/09 16:20:05 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,6 @@ t_fvector	v_3d_p_rot(t_fvector rot_p, t_fvector pivot_p, t_fvector rot);
 t_fvector	v_3d_orig_rot(t_fvector point, t_fvector rot);
 //texturing
 void		uv_map(t_rt *rt, t_ray *ray, int cur_obj);
-t_color		apply_check_pattern(t_rt *rt, float scale, float x, float y);
+t_color		apply_check_pattern(t_rt *rt, float scale, t_object obj);
 t_color		apply_texture(t_rt *rt, float x, float y);
 #endif
