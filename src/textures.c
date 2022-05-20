@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:33:42 by eniini            #+#    #+#             */
-/*   Updated: 2022/05/09 22:35:17 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/16 17:19:23 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,33 +48,41 @@ t_color	apply_texture(t_rt *rt, float x, float y)
 	float	b = 50.0f;
 	float	t = (a * x + b * y);
 	float	s = t - floorf(t);
-	//float	s = 1.0f + sinf(t) / 2.0f;
 	return (col_blend((t_color){0,0,0}, (t_color){1,1,1}, s));
-	//(1.0+sin(t))/2.0, abs(sin(t)) and (t−floor(t))
-
 }
 
 /*
-*	[pos] is assumed to be a point in the surface of the sphere.
+*	Were translating a Cartesian coordinate into spherical coordinate into an
+*	unique UV point.
+*	[hp] is assumed to be a point in the surface of the sphere.
+*	[n] is unit vector from [hp] to the sphere's origin point [pos].
+*	to define unique set of spherical coordinates (r, θ, φ), they are restricted
+*	to ranges of (180° or π rad) and (360° or 2π rad).
+*	Additionally, due to spherical map being in 1:2 ratio, V is divided by 2.
 */
-static void	spherical_map(t_rt *rt, t_fvector pos, t_fvector hp, t_object obj)
+static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 {
-	float	theta;
-	float	phi;
-
-	theta = atan2f(pos.x, pos.z);
-	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
-	phi = acosf(pos.y / v_len(v_sub(hp, obj.pos)));
-	rt->uv_v = 1.0f - (phi / M_PI);
+	t_fvector	n;
+	
+	n = v_normalize(v_sub(hp, pos));
+	rt->uv_u = 0.5f + (atan2f(n.z, n.x) / (2.0f * M_PI));
+	rt->uv_v = 0.5f + (asinf(n.y) / M_PI);
 	rt->uv_v *= 0.5;
 }
 
+/*
+*	TODO: check plane normal against POV to correctly UV wrap planes facing
+*	the opposite direction or ones directly adjacent (swap z -> y).
+*/
 static void planar_map(t_rt *rt, t_fvector hp)
 {
 	rt->uv_u = fmodf(hp.x, 1.0f);
 	rt->uv_v = fmodf(hp.z, 1.0f);
 }
 
+/*
+*	TODO: needs to work on non-zero positions and with angled directions.
+*/
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
 	float	theta;
@@ -84,18 +92,16 @@ static void	cylindrical_map(t_rt *rt, t_fvector pos)
 	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);
 }
 
+/*
+*	TODO: make sure you cant access UV coordinates with invalid shapes.
+*	[bool textureable] or something like that.
+*/
 void	uv_map(t_rt *rt, t_ray *ray, int cur_obj)
 {
 	if (rt->object[cur_obj].type == SPHERE)
-	{
-		spherical_map(rt, ray->start, ray->start, rt->object[cur_obj]);
-	}
+		spherical_map(rt, ray->start, rt->object[cur_obj].pos);
 	if (rt->object[cur_obj].type == PLANE)
-	{
 		planar_map(rt, ray->start);
-	}
 	if (rt->object[cur_obj].type == CYL)
-	{
 		cylindrical_map(rt, ray->start);
-	}
 }

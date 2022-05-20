@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:13:52 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/28 19:56:27 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/20 13:10:52 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,34 +47,4 @@ t_bool	draw_light(t_rt *rt, float *t, int x, int y)
 		return (TRUE);
 	}
 	return (FALSE);
-}
-
-t_bool	draw_debug_cam(t_rt *rt, float *t, int x, int y)
-{
-	t_object	*tempobj;
-	t_bool		retval;
-
-	retval = FALSE;
-	tempobj = ft_memalloc(sizeof(t_object));
-	tempobj->r = 1;
-	tempobj->pos = rt->altcam.pos;
-	if (ray_sphere_intersect(&rt->ray_prime, tempobj, t))
-	{
-		draw_pixel(x, y, &rt->rend.win_buffer, 0xFF0000);
-		retval = TRUE;
-	}
-	tempobj->pos = rt->altcam.vup;
-	if (ray_sphere_intersect(&rt->ray_prime, tempobj, t))
-	{
-		draw_pixel(x, y, &rt->rend.win_buffer, 0x00FF00);
-		retval = TRUE;
-	}
-	tempobj->pos = rt->altcam.vup;
-	if (ray_sphere_intersect(&rt->ray_prime, tempobj, t))
-	{
-		draw_pixel(x, y, &rt->rend.win_buffer, 0x0000FF);
-		retval = TRUE;
-	}
-	free(tempobj);
-	return (retval);
 }

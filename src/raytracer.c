@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/09 16:21:59 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/20 13:19:18 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ static uint32_t	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_material mat)
 {
 	float	phong;
 	float	lambert;
-	t_color	ambient;
+	//t_color	ambient;
 	t_color	specular;
 	t_color	final;
 
 	phong = fmaxf(v_dot(reflect(lray.dir, n), v_normalize(rt->cam.pos)), 0.0f);
 	phong = powf(ft_clamp_f(phong, 0.0f, 1.0f), DEBUG_ROUGHNESS);
 	lambert = v_dot(lray.dir, n);
-	ambient = col_multiply(rt->amb_l, rt->amb_p);
+	//ambient = col_multiply(rt->amb_l, rt->amb_p);
 	specular = col_multiply((t_color){1,1,1}, phong); //debugging with pure white light
 	final = col_add(rt->light[0].amb_col, mat.diffuse, lambert);
 	final = col_add(final, specular, 1.0f);
@@ -96,9 +96,9 @@ uint32_t *color)
 	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
 	uv_map(rt, ray, cur_obj);
 	//mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
-	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 5, rt->object[cur_obj]), 0.5f);
+	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, rt->object[cur_obj]), 0.5f);
 	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
-	*color = assign_color(rt, lr, n, mat); //v_dot(lr.dir, n), mat);
+	*color = assign_color(rt, lr, n, mat);
 }
 
 void	raytracer(t_rt *rt, int x, int y)
@@ -110,7 +110,6 @@ void	raytracer(t_rt *rt, int x, int y)
 	int			cur_obj;
 
 	color = 0;
-	//rt->ray_prime = init_ray(rt->altcam, (float)x / (WIN_W - 1), (float)y / WIN_H - 1);
 	ray_trough_screen(rt, x, y);
 	t = 20000.0f;
 	cur_obj = -1;
@@ -126,8 +125,6 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if (draw_light(rt, &t, x, y))
 		return ;		//hit debug lightpoint, end casting
-	//if (draw_debug_cam(rt, &t, x, y))
-	//	return ;
 	if (cur_obj == -1)
 		return ;		//no objects found, stay black
 	rt->ray_light.start = v_add(rt->ray_prime.start, v_mult(rt->ray_prime.dir, t));

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 22:13:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:58:06 by esukava          ###   ########.fr       */
+/*   Updated: 2022/05/20 13:17:25 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RTv1.h"
 
-t_bool static	str_to_rot(int *i, char *str, float *pos)
+static t_bool str_to_rot(int *i, char *str, float *pos)
 {
 	char	ret[3];
 	int		j;

@@ -31,7 +31,6 @@ SRC_LIST = draw_pixel.c \
 		grayscale.c \
 		bmp_screencap.c \
 		color_manip.c \
-		projection.c \
 		v_rotation.c \
 		textures.c
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
