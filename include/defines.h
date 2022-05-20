@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:56:17 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/05 17:11:37 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/20 20:42:58 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # define WIN_HW 400
 # define WIN_HH 300
 # define WIN_NAME	"esukava/eniini interactive raytracer ver. 0.1"
+
+# define ROUGHNESS		120.0f
+# define RAY_LIMIT		20000.0f
+# define RAY_DEPTH		3
+# define REFRAC_FALLOFF	5.0f
 
 typedef struct s_fvector {
 	float	x;

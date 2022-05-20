@@ -6,13 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/20 13:19:18 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/20 21:13:08 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RTv1.h"
-
-#define DEBUG_ROUGHNESS 120.f
 
 static t_bool	in_shadow(t_rt *rt, t_ray light_ray, t_fvector n,
 int cur_obj)
@@ -22,12 +20,34 @@ int cur_obj)
 	k = 0;
 	while (k < rt->object_count)
 	{
-		if (v_dot(n, light_ray.dir) > 0 && k != cur_obj
-			&& ray_object_intersect(&light_ray, &rt->object[k], &rt->t))
+		rt->t = v_len(v_sub(light_ray.start, rt->object[k].pos));
+		rt->t = RAY_LIMIT;
+		if 	(ray_object_intersect(&light_ray, &rt->object[k], &rt->t))
+		{
 			return (TRUE);
+		}
 		k++;
 	}
 	return (FALSE);
+}
+
+static void	cast_reflect(t_rt *rt, t_material *mat, t_ray *r, int cur_obj)
+{
+	int		i;
+	//float	distance;
+	//float	intensity;
+
+	i = 0;
+	while (i < rt->object_count)
+	{	
+		if (ray_object_intersect(r, &rt->object[i], &rt->t))
+		{
+			//distance = v_len(v_sub(r->start, rt->object[i].pos));
+			//intensity = 1.0f - (ft_clamp_f(distance, 0, REFRAC_FALLOFF) / REFRAC_FALLOFF);
+			mat->diffuse = col_blend(mat->diffuse, rt->material[rt->object[i].material].diffuse, 0.75f);
+		}
+		i++;
+	}
 }
 
 /*
@@ -58,7 +78,7 @@ static uint32_t	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_material mat)
 	t_color	final;
 
 	phong = fmaxf(v_dot(reflect(lray.dir, n), v_normalize(rt->cam.pos)), 0.0f);
-	phong = powf(ft_clamp_f(phong, 0.0f, 1.0f), DEBUG_ROUGHNESS);
+	phong = powf(ft_clamp_f(phong, 0.0f, 1.0f), ROUGHNESS);
 	lambert = v_dot(lray.dir, n);
 	//ambient = col_multiply(rt->amb_l, rt->amb_p);
 	specular = col_multiply((t_color){1,1,1}, phong); //debugging with pure white light
@@ -79,6 +99,7 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj,
 uint32_t *color)
 {
 	t_ray		lr;
+	t_ray		reflection_ray;
 	t_fvector	dist;
 	t_material	mat;
 	t_fvector	n;
@@ -86,14 +107,18 @@ uint32_t *color)
 	n = find_object_normal(&rt->object[cur_obj], ray);
 	if (v_dot(n, ray->dir) > 0)
 		v_mult(n, -1);
+	
+	reflection_ray.start = v_add(ray->start, v_mult(n, 0.05));
+	reflection_ray.dir = n;
 	dist = v_sub(rt->object[9].pos, ray->start);	//distance of light
 	if (v_dot(n, dist) <= 0)						//not facing the light
 		return ;
 	lr.start = v_add(ray->start, v_mult(n, 0.05));
 	lr.dir = v_normalize(dist);
+	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
 	if (in_shadow(rt, lr, n, cur_obj))
 		return ;
-	mat = rt->material[rt->object[cur_obj].material];			//local copy of a preset material
+	cast_reflect(rt, &mat, &reflection_ray, cur_obj);
 	uv_map(rt, ray, cur_obj);
 	//mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
 	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, rt->object[cur_obj]), 0.5f);
@@ -111,7 +136,7 @@ void	raytracer(t_rt *rt, int x, int y)
 
 	color = 0;
 	ray_trough_screen(rt, x, y);
-	t = 20000.0f;
+	t = RAY_LIMIT;
 	cur_obj = -1;
 	i = 0;
 	while (i < rt->object_count)

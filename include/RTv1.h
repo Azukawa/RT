@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/20 13:12:03 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/20 18:04:07 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,25 +111,6 @@ typedef struct s_cam{
 	t_fvector	up;
 }				t_cam;
 
-//dynamic lookfrom-lookat cam implementation
-/*
-typedef struct s_alt_cam {
-	t_fvector	pos;
-	t_fvector	dir;
-	t_fvector	h;
-	t_fvector	v;
-	t_fvector	llc;
-	t_fvector	rot;
-	t_fvector	mod_pos;
-	t_fvector	mod_dir;
-	t_fvector	rot_pos;
-	t_fvector	rot_dir;
-	t_fvector	debug_pos;
-	t_fvector	debug_dir;
-	t_fvector	vup;
-	t_fvector	vside;
-}				t_alt_cam;*/
-
 //Holds everything related directly to SDL's drawbuffer.
 typedef struct s_rend
 {
@@ -176,8 +157,6 @@ typedef struct s_rt {
 	float		amb_p;
 	t_ray		ray_prime;
 	t_ray		ray_light;
-	//t_alt_cam	altcam;
-	//t_bool		debug;
 	float		uv_u;
 	float		uv_v;
 }				t_rt;
@@ -257,13 +236,6 @@ t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
 t_color		col_substract(t_color base, t_color mix, float p);
 t_color		col_add(t_color base, t_color mix, float p);
-//alternative camera
-//t_ray		init_ray(t_alt_cam cam, float u, float v);
-//void		init_alt_cam(t_alt_cam *cam, t_fvector lookfrom, t_fvector lookat);
-//t_bool		draw_debug_cam(t_rt *rt, float *t, int x, int y);
-//camera controls
-//t_fvector	v_3d_p_rot(t_fvector rot_p, t_fvector pivot_p, t_fvector rot);
-//t_fvector	v_3d_orig_rot(t_fvector point, t_fvector rot);
 //texturing
 void		uv_map(t_rt *rt, t_ray *ray, int cur_obj);
 t_color		apply_check_pattern(t_rt *rt, float scale, t_object obj);
