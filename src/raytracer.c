@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/05/20 21:13:08 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/03 13:56:20 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,18 @@ uint32_t *color)
 		return ;
 	cast_reflect(rt, &mat, &reflection_ray, cur_obj);
 	uv_map(rt, ray, cur_obj);
-	//mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
+//	mat.diffuse = apply_texture(rt, rt->uv_u, rt->uv_v); //insane procedural texture creation
 	mat.diffuse = col_lerp(mat.diffuse, apply_check_pattern(rt, 25, rt->object[cur_obj]), 0.5f);
 	mat.diffuse = col_lerp(mat.diffuse, rt->amb_l, rt->amb_p);	//mix ambient light in depending on its intensity
 	*color = assign_color(rt, lr, n, mat);
 }
 
+// t_v3 refldir = vec_multiply_f(vec_multiply_f(vec_sub(ray_dir, hit_normal), 2.0f),vec_dot(ray_dir, hit_normal));
+//vec_normalize(&refldir);
+
 void	raytracer(t_rt *rt, int x, int y)
 {
-	int			i;
+	int			i, j;
 	t_color		mixer;
 	uint32_t	color;
 	float		t;
@@ -138,15 +141,36 @@ void	raytracer(t_rt *rt, int x, int y)
 	ray_trough_screen(rt, x, y);
 	t = RAY_LIMIT;
 	cur_obj = -1;
-	i = 0;
+	i = j = 0;
 	while (i < rt->object_count)
 	{
 		if (ray_object_intersect(&rt->ray_prime, &rt->object[i], &t))
+		// tähän else, jos materiaali on peili, ammu uus säde oikeeseen suuntaan
+		{
 			cur_obj = i;
+		}
 		mixer = col_multiply(rt->material[rt->object[cur_obj].material].diffuse, rt->amb_p);
 		color = col_to_uint(col_blend(mixer, rt->amb_l, rt->amb_p));
 		rt->light[0].amb_col = col_blend(mixer, rt->amb_l, rt->amb_p);
 		i++;
+	}
+	if(rt->object[cur_obj].material == 3) //if material is mirror, do all this:
+	{
+		rt->ray_prime.start = v_mult(rt->ray_prime.dir, t);
+		t_fvector n = find_object_normal(&rt->object[cur_obj], &rt->ray_prime);
+		t = RAY_LIMIT;
+		cur_obj = -1;
+		rt->ray_prime.dir = v_mult(v_mult(v_sub(rt->ray_prime.dir, n), 2.0f), v_dot(rt->ray_prime.dir, n));
+//		rt->ray_prime.dir = v_sub(rt->object[cur_obj].pos, rt->ray_prime.start);
+		v_normalize(rt->ray_prime.dir);
+//		rt->ray_prime.dir = v_mult(rt->ray_prime.dir, -1);
+//		rt->ray_prime.start = v_mult(rt->ray_prime.start, -1);
+		while (j < rt->object_count)
+		{	
+			if(ray_object_intersect(&rt->ray_prime, &rt->object[j], &t))
+				cur_obj = j;
+			j++;
+		}
 	}
 	if (draw_light(rt, &t, x, y))
 		return ;		//hit debug lightpoint, end casting

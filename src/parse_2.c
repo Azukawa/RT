@@ -6,7 +6,7 @@
 /*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 19:27:36 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 20:58:06 by esukava          ###   ########.fr       */
+/*   Updated: 2022/05/31 16:26:34 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_bool	parse_r(t_rt *rt, char *str, int index)
 		return (FALSE);
 }
 
-//material 0-2
+//material 0-3. 0-2 normal materials. 3 is mirror
 t_bool	parse_material(t_rt *rt, char *str, int index)
 {
 	int	i;
@@ -83,7 +83,7 @@ t_bool	parse_material(t_rt *rt, char *str, int index)
 	if (ft_isdigit(str[i]))
 	{
 		val = ft_atoi(&str[i]);
-		if (val >= 0 && val <= 2)
+		if (val >= 0 && val <= 3)
 		{
 			rt->object[index].material = val;
 			return (TRUE);
