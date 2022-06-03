@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/03 13:56:20 by alero            ###   ########.fr       */
+/*   Updated: 2022/06/03 14:59:33 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if(rt->object[cur_obj].material == 3) //if material is mirror, do all this:
 	{
-		rt->ray_prime.start = v_mult(rt->ray_prime.dir, t);
+		rt->ray_prime.start = v_add(rt->ray_prime.start, v_mult(rt->ray_prime.dir, t));
 		t_fvector n = find_object_normal(&rt->object[cur_obj], &rt->ray_prime);
 		t = RAY_LIMIT;
 		cur_obj = -1;
