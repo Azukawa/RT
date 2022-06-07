@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ray_intersect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:14:57 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/23 18:30:18 by esukava          ###   ########.fr       */
+/*   Updated: 2022/05/29 18:00:54 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt.h"
 
 t_bool	ray_plane_intersect(t_ray *r, t_object *p, float *t)
 {
@@ -95,13 +95,18 @@ t_fvector r2o, float c_fctr)
 	return (ret);
 }
 
+/*
+*	Returns a distance to the point of intersection between a ray and
+*	an infinite sized cone. [r] exists as a multiplier that denotes the angle
+*	cones' extension. 
+*/
 t_bool	ray_cone_intersect(t_ray *r, t_object *obj, float *result)
 {
-	t_fvector	abc;
-	t_fvector	r2o;
 	float		t0;
 	float		t1;
 	float		c_fctr;
+	t_fvector	abc;
+	t_fvector	r2o;
 
 	c_fctr = (1 + (obj->angle * DEG_TO_RAD) * (obj->angle * DEG_TO_RAD));
 	r2o = v_sub(r->start, obj->pos);

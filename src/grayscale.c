@@ -6,11 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 10:54:58 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/15 21:33:02 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:27:22 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt.h"
 
 /*
 *	Calculates 'truer', gamma-corrected perceived brightness of the given color.

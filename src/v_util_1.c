@@ -6,11 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:15:23 by esukava           #+#    #+#             */
-/*   Updated: 2022/04/08 23:36:18 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:29:03 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt.h"
 
 t_fvector	v_cross(t_fvector va, t_fvector vb)
 {

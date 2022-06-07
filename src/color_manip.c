@@ -6,39 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/15 21:32:54 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/07 22:49:38 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
-
-/*
-**	Lineal interpolation calculation using floating point values.
-**	Handles precision differences between arguments by dividing
-**	the multiplications between [p] and [a/b] in two parts.
-*/
-static double	lerpf(float a, float b, float p)
-{
-	if (a == b)
-		return (a);
-	if (p == 1)
-		return (b);
-	if (!(p))
-		return (a);
-	return ((a * (1.0f - p)) + (b * p));
-}
-
-/*
-*	Clamps the float [value] between [min] & [max].
-*/
-static double	clampf(float value, float min, float max)
-{
-	if (value < min)
-		value = min;
-	if (value > max)
-		value = max;
-	return (value);
-}
+#include "rt.h"
 
 //convert t_color to ARGB uint for SDL pixel painting
 uint32_t	col_to_uint(t_color color)
@@ -47,9 +19,9 @@ uint32_t	col_to_uint(t_color color)
 	uint8_t	ig;
 	uint8_t	ib;
 
-	ir = (uint8_t)(255 * clampf(color.red, 0.0f, 1.0f));
-	ig = (uint8_t)(255 * clampf(color.green, 0.0f, 1.0f));
-	ib = (uint8_t)(255 * clampf(color.blue, 0.0f, 1.0f));
+	ir = (uint8_t)(255 * ft_clamp_d(color.red, 0.0f, 1.0f));
+	ig = (uint8_t)(255 * ft_clamp_d(color.green, 0.0f, 1.0f));
+	ib = (uint8_t)(255 * ft_clamp_d(color.blue, 0.0f, 1.0f));
 	return (255 << 24 | ir << 16 | ig << 8 | ib);
 }
 
@@ -62,9 +34,9 @@ t_color	col_lerp(t_color c1, t_color c2, float p)
 		p = 0.0f;
 	if (p > 1.0f)
 		p = 1.0f;
-	result.red = lerpf(c1.red, c2.red, p);
-	result.green = lerpf(c1.green, c2.green, p);
-	result.blue = lerpf(c1.blue, c2.blue, p);
+	result.red = (float)ft_d_lerp(c1.red, c2.red, p);
+	result.green = (float)ft_d_lerp(c1.green, c2.green, p);
+	result.blue = (float)ft_d_lerp(c1.blue, c2.blue, p);
 	return (result);
 }
 
@@ -89,28 +61,9 @@ t_color	col_multiply(t_color color, float m)
 {
 	t_color	result;
 
-	result.red = clampf(color.red * m, 0.0f, 1.0f);
-	result.green = clampf(color.green * m, 0.0f, 1.0f);
-	result.blue = clampf(color.blue * m, 0.0f, 1.0f);
-	return (result);
-}
-
-t_color	col_substract(t_color base, t_color mix, float p)
-{
-	t_color	result;
-
-	if (p == 0.0f)
-		return (base);
-	if (p == 1.0f)
-	{
-		result.red = clampf(base.red - mix.red, 0.0f, 1.0f);
-		result.green = clampf(base.green - mix.green, 0.0f, 1.0f);
-		result.blue = clampf(base.blue - mix.blue, 0.0f, 1.0f);
-		return (result);
-	}
-	result.red = clampf(base.red - (p * mix.red), 0.0f, 1.0f);
-	result.green = clampf(base.green - (p * mix.green), 0.0f, 1.0f);
-	result.blue = clampf(base.blue - (p * mix.blue), 0.0f, 1.0f);
+	result.red = ft_clamp_d(color.red * m, 0.0f, 1.0f);
+	result.green = ft_clamp_d(color.green * m, 0.0f, 1.0f);
+	result.blue = ft_clamp_d(color.blue * m, 0.0f, 1.0f);
 	return (result);
 }
 
@@ -122,13 +75,13 @@ t_color	col_add(t_color base, t_color mix, float p)
 		return (base);
 	if (p == 1.0f)
 	{
-		result.red = clampf(base.red + mix.red, 0.0f, 1.0f);
-		result.green = clampf(base.green + mix.green, 0.0f, 1.0f);
-		result.blue = clampf(base.blue + mix.blue, 0.0f, 1.0f);
+		result.red = ft_clamp_d(base.red + mix.red, 0.0f, 1.0f);
+		result.green = ft_clamp_d(base.green + mix.green, 0.0f, 1.0f);
+		result.blue = ft_clamp_d(base.blue + mix.blue, 0.0f, 1.0f);
 		return (result);
 	}
-	result.red = clampf(base.red + (p * mix.red), 0.0f, 1.0f);
-	result.green = clampf(base.green + (p * mix.green), 0.0f, 1.0f);
-	result.blue = clampf(base.blue + (p * mix.blue), 0.0f, 1.0f);
+	result.red = ft_clamp_d(base.red + (p * mix.red), 0.0f, 1.0f);
+	result.green = ft_clamp_d(base.green + (p * mix.green), 0.0f, 1.0f);
+	result.blue = ft_clamp_d(base.blue + (p * mix.blue), 0.0f, 1.0f);
 	return (result);
 }

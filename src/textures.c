@@ -6,23 +6,23 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 16:33:42 by eniini            #+#    #+#             */
-/*   Updated: 2022/05/16 17:19:23 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/08 00:21:22 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt.h"
 
 /*
 *	Returns a color corresponding to a checkered pattern. [Scale] directly
 *	corresponds to how many tiles are generated onto the plane.
 */
-t_color	apply_check_pattern(t_rt *rt, float scale, t_object obj)
+t_color	apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc)
 {
 	t_bool	yresult;
 	t_bool	xresult;
 	t_bool	result;
 
-	if (obj.type == PLANE)
+	if (rt->object[cur_obj].type == PLANE)
 		scale = 1.0f;
 	if (((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
 		yresult = TRUE;
@@ -34,22 +34,22 @@ t_color	apply_check_pattern(t_rt *rt, float scale, t_object obj)
 		xresult = FALSE;
 	result = (xresult ^ yresult);
 	if (result)
-		return ((t_color){0,0,0});
+		return (col_lerp(oc, (t_color){0, 0, 0}, 0.5f));
 	else
-		return ((t_color){1,1,1});
+		return (col_lerp(oc, (t_color){1, 1, 1}, 0.5f));
 }
 
 /*
 *	TESTING
-*/
-t_color	apply_texture(t_rt *rt, float x, float y)
+t_color	apply_texture(t_rt *rt, float scale, int cur_obj)
 {
+	t_fvector v = (t_fvector){rt->uv_u * scale, rt->uv_v * scale, 0, 1};
 	float	a = 20.0f;
 	float	b = 50.0f;
-	float	t = (a * x + b * y);
+	float	t = (a * rt->uv_u + b * rt->uv_v);
 	float	s = t - floorf(t);
-	return (col_blend((t_color){0,0,0}, (t_color){1,1,1}, s));
-}
+	return (col_blend((t_color){0, 0, 0}, (t_color){1, 1, 1}, s));
+}*/
 
 /*
 *	Were translating a Cartesian coordinate into spherical coordinate into an
@@ -63,7 +63,7 @@ t_color	apply_texture(t_rt *rt, float x, float y)
 static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 {
 	t_fvector	n;
-	
+
 	n = v_normalize(v_sub(hp, pos));
 	rt->uv_u = 0.5f + (atan2f(n.z, n.x) / (2.0f * M_PI));
 	rt->uv_v = 0.5f + (asinf(n.y) / M_PI);
@@ -74,7 +74,7 @@ static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 *	TODO: check plane normal against POV to correctly UV wrap planes facing
 *	the opposite direction or ones directly adjacent (swap z -> y).
 */
-static void planar_map(t_rt *rt, t_fvector hp)
+static void	planar_map(t_rt *rt, t_fvector hp)
 {
 	rt->uv_u = fmodf(hp.x, 1.0f);
 	rt->uv_v = fmodf(hp.z, 1.0f);

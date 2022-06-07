@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   vector_rotation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esukava <esukava@student.42.fr>            +#+  +:+       +#+        */
+/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:15:44 by esukava           #+#    #+#             */
-/*   Updated: 2022/02/20 21:15:47 by esukava          ###   ########.fr       */
+/*   Updated: 2022/05/29 15:29:13 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt.h"
 
 void	v_rot_x(t_fvector *vec, float rad)
 {

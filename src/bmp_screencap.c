@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/29 17:35:18 by eniini            #+#    #+#             */
-/*   Updated: 2022/04/15 21:47:20 by eniini           ###   ########.fr       */
+/*   Updated: 2022/05/29 15:27:08 by eniini           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,12 @@
 **	little-endian order.
 */
 
-#include "RTv1.h"
+#include "rt.h"
 
 //file I/O
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-//error handling
-#include <string.h>
-#include <errno.h>
 
 /*
 **	BITMAP_FILE_HEADER contents:
