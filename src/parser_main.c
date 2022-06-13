@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:48:00 by eniini            #+#    #+#             */
-/*   Updated: 2022/06/02 17:46:09 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/11 17:42:46 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,17 @@ static void	init_light(t_rt *rt, char *line)
 		ft_getout("excplicitly defined light needs color definition");
 	rt->light.pos = pos;
 	rt->light.color = read_color(ptr);
+}
+
+static void	init_mirror(t_object *object, char *line)
+{
+		char	*ptr;
+	
+	if (!line || *line == '\0')
+		ft_getout("Missing color definition/or mirror");
+	ptr = line + 1;
+	if (*ptr == 'm')
+		object->mirror = 1;
 }
 
 /*
@@ -48,6 +59,7 @@ static void	init_object(t_rt *rt, char *ptr, char c, int obj_n)
 		ft_getout("Invalid object init! (Incorrect delimiter character)");
 	r = ft_atof(ptr + 1);
 	ptr = ft_strchr(ptr + 1, ' ');
+	rt->object[obj_n].mirror = 0;
 	if (c == 's')
 		init_sphere(&rt->object[obj_n], pos, r, read_color(ptr));
 	else
@@ -58,6 +70,7 @@ static void	init_object(t_rt *rt, char *ptr, char c, int obj_n)
 		init_cyl(&rt->object[obj_n], pos, dir, read_color(ptr));
 	if (c == 'v')
 		init_cone(&rt->object[obj_n], pos, dir, read_color(ptr));
+	init_mirror(&rt->object[obj_n], ptr);
 }
 
 /*

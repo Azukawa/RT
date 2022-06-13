@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/08 00:32:02 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/13 15:48:03 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,44 +95,74 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj, t_color *c)
 	*c = assign_color(rt, lr, n, *c);
 }
 
+//this function is called if ray_prime hits mirror object.
+//In such case ray_prime is re-initialized to shoot from the mirror object.
+void	hit_mirror(t_rt *rt, int *cur_obj, float *t)
+{
+		
+//		printf("cur_obj in hit_mirrir() = %d\n", *cur_obj);
+		unsigned int i = 0;
+		rt->ray_prime.start = v_add(rt->ray_prime.start, v_mult(rt->ray_prime.dir, *t));
+		t_fvector n = find_object_normal(&rt->object[*cur_obj], &rt->ray_prime);
+		*t = RAY_LIMIT;
+		*cur_obj = -1;
+		rt->ray_prime.dir = v_mult(v_mult(v_sub(rt->ray_prime.dir, n), 2.0f), v_dot(rt->ray_prime.dir, n));
+//		printf("%f, %f, %f\t", rt->ray_prime.dir.x, rt->ray_prime.dir.y, rt->ray_prime.dir.z);
+		v_normalize(rt->ray_prime.dir);
+		while (i < rt->objcount)
+		{	
+			if(ray_object_intersect(&rt->ray_prime, &rt->object[i], t))
+			{	
+				*cur_obj = i;
+				printf("MIRROR HIT\tcur_obj = %d\n", *cur_obj);
+			}
+			i++;
+		}
+}
+
 static t_color	ray_col(t_rt *rt, int cur_obj, float t)
 {
 	t_color		mixer;
 
+//	if(rt->object[cur_obj].mirror == 1) //if material is mirror, do all this:
+//		hit_mirror(rt, cur_obj, &t);
 	rt->ray_light.start = v_add(rt->ray_prime.start, \
 		v_mult(rt->ray_prime.dir, t));
 	rt->ray_light.dir = rt->ray_prime.dir;
 	uv_map(rt, &rt->ray_light, cur_obj);
 	mixer = col_add(rt->object[cur_obj].color, rt->amb_col, 1.0f);
 	calculate_lighting(rt, &rt->ray_light, cur_obj, &mixer);
-	mixer = col_blend(mixer, apply_check_pattern(rt, 25, cur_obj, mixer), 0.1f);
+//	mixer = col_blend(mixer, apply_check_pattern(rt, 25, cur_obj, mixer), 0.1f);
 	return (mixer);
 }
 
 void	raytracer(t_rt *rt, int x, int y)
 {
-	uint		i;
+	unsigned int		i;
 	float		t;
-	t_bool		hit;
-
+	int			cur_obj;
+	
 	ray_trough_screen(rt, x, y);
 	t = RAY_LIMIT;
-	hit = FALSE;
+	cur_obj = -1;
 	i = 0;
-	while (i < rt->objcount && !hit)
+	while (i < rt->objcount)
 	{
 		if (ray_object_intersect(&rt->ray_prime, &rt->object[i], &t))
 		{
-			hit = TRUE;
-			break ;
+			cur_obj = i;
 		}
 		i++;
 	}
-	if (draw_light(rt, &t, x, y) || !hit)
+	if(rt->object[cur_obj].mirror == 1) //if material is mirror, do all this:
+		hit_mirror(rt, &cur_obj, &t);
+	if (draw_light(rt, &t, x, y))
 		return ;
+	if (cur_obj == -1)
+		return ;	
 	if (rt->is_grayscale)
 		draw_pixel(x, y, &rt->rend.win_buffer, \
-			convert_to_grayscale(col_to_uint(ray_col(rt, i, t))));
+			convert_to_grayscale(col_to_uint(ray_col(rt, cur_obj, t))));
 	else
-		draw_pixel(x, y, &rt->rend.win_buffer, col_to_uint(ray_col(rt, i, t)));
+		draw_pixel(x, y, &rt->rend.win_buffer, col_to_uint(ray_col(rt, cur_obj, t)));
 }

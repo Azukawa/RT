@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/02 17:18:33 by eniini           ###   ########.fr       */
+/*   Updated: 2022/06/11 15:46:23 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_object{
 	int			type;
 	float		angle;
 	t_color		color;
+	t_bool		mirror;
 }				t_object;
 
 typedef struct s_ray{
