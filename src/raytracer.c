@@ -6,22 +6,26 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/15 14:24:50 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/02 16:01:34 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-static t_bool	in_shadow(t_rt *rt, t_ray light_ray, uint cur_obj)
+//v_dot(n, light_ray) < 0 is responsible for selfshadow.
+//figure out how to make it work.
+static t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, t_fvector n)
 {
-	uint	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i < rt->objcount && i != cur_obj)
 	{
+	//	if(v_dot(n, light_ray.dir) > 0)
+	//		return (TRUE);
 		rt->t = v_len(v_sub(light_ray.start, rt->object[i].pos));
 		rt->t = RAY_LIMIT;
-		if (ray_object_intersect(&light_ray, &rt->object[i], &rt->t))
+		if (v_dot(n, light_ray.dir) < 0 && ray_object_intersect(&light_ray, &rt->object[i], &rt->t))
 		{
 			return (TRUE);
 		}
@@ -87,11 +91,11 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj, t_color *c)
 		return ;
 	lr.start = v_add(ray->start, v_mult(n, 0.0001f));
 	lr.dir = v_normalize(dist);
-//	if (in_shadow(rt, lr, cur_obj))
-//	{
-//		*c = col_multiply(*c, 0.2f);
-//		return ;
-//	}
+	if (in_shadow(rt, lr, cur_obj, n))
+	{
+		*c = col_multiply(*c, 0.2f);
+		return ;
+	}
 	*c = assign_color(rt, lr, n, *c);
 }
 
@@ -117,9 +121,9 @@ void	hit_mirror(t_rt *rt, int *cur_obj, float *t, unsigned int depth)
 			}
 			i++;
 		}
-		if(rt->object[*cur_obj].mirror == 1 && depth < 5) //if material is mirror, do all this:
-			hit_mirror(rt, cur_obj, t, depth++);
-		printf("MIRROR HIT depth %d\tcur_obj = %d\n", depth, *cur_obj);
+		if(rt->object[*cur_obj].mirror == 1 && depth > 0) //if material is mirror, do all this:
+			hit_mirror(rt, cur_obj, t, depth--);
+//		printf("MIRROR HIT depth %d\tcur_obj = %d\n", depth, *cur_obj);
 
 }
 
@@ -156,7 +160,7 @@ void	raytracer(t_rt *rt, int x, int y)
 		i++;
 	}
 	if(rt->object[cur_obj].mirror == 1) //if material is mirror, do all this:
-		hit_mirror(rt, &cur_obj, &t, 0);
+		hit_mirror(rt, &cur_obj, &t, 5);
 	if (draw_light(rt, &t, x, y))
 		return ;
 	if (cur_obj == -1)

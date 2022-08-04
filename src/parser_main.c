@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:48:00 by eniini            #+#    #+#             */
-/*   Updated: 2022/06/11 17:42:46 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/02 15:15:18 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	init_light(t_rt *rt, char *line)
 	ptr = ft_strchr(ptr, ' ');
 	if (!ptr)
 		ft_getout("excplicitly defined light needs color definition");
+	rt->light.r = 0.5;
 	rt->light.pos = pos;
 	rt->light.color = read_color(ptr);
 }
