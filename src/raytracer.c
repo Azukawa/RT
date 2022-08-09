@@ -6,26 +6,22 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/08/02 16:01:34 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/09 16:55:42 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-//v_dot(n, light_ray) < 0 is responsible for selfshadow.
-//figure out how to make it work.
 static t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, t_fvector n)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (i < rt->objcount && i != cur_obj)
+	while (i < rt->objcount)
 	{
-	//	if(v_dot(n, light_ray.dir) > 0)
-	//		return (TRUE);
 		rt->t = v_len(v_sub(light_ray.start, rt->object[i].pos));
 		rt->t = RAY_LIMIT;
-		if (v_dot(n, light_ray.dir) < 0 && ray_object_intersect(&light_ray, &rt->object[i], &rt->t))
+		if (i != cur_obj && (ray_object_intersect(&light_ray, &rt->object[i], &rt->t)))
 		{
 			return (TRUE);
 		}
@@ -33,6 +29,23 @@ static t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, t_fvect
 	}
 	return (FALSE);
 }
+
+
+//this is the old in_shadow function, used for testing purposes.
+//t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, t_fvector n)
+//{
+//	unsigned int		k;
+//
+//	k = 0;
+//	while (k < rt->objcount)
+//	{
+//		if (v_dot(n, light_ray.dir) > 0 && k != cur_obj
+//			&& ray_object_intersect(&light_ray, &rt->object[k], &rt->t))
+//			return (TRUE);
+//		k++;
+//	}
+//	return (FALSE);
+//}
 
 /*
 *	Returns a vector representing the relfection direction given the
@@ -87,11 +100,11 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj, t_color *c)
 	if (v_dot(n, ray->dir) > 0)
 		v_mult(n, -1);
 	dist = v_sub(rt->light.pos, ray->start);
-	if (v_dot(n, dist) <= 0)
-		return ;
+//	if (v_dot(n, dist) <= 0)
+//		return ;
 	lr.start = v_add(ray->start, v_mult(n, 0.0001f));
 	lr.dir = v_normalize(dist);
-	if (in_shadow(rt, lr, cur_obj, n))
+	if (v_dot(n, dist) <= 0 || in_shadow(rt, lr, cur_obj, n)) // putting the v_dot here fixed selfshadow
 	{
 		*c = col_multiply(*c, 0.2f);
 		return ;
