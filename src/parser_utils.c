@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/06/11 17:08:41 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/15 15:33:59 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@ t_color	read_color(char *line)
 {
 	char	*ptr;
 	t_color	c;
-	
+
 	if (!line || *line == '\0')
 		ft_getout("Missing color definition");
 	ptr = line + 1;
 	if (*ptr == 'm')
-		return((t_color){0, 0, 0});
+	{
+		printf("ptr = 'm'\n");
+		return ((t_color){0, 0, 0});
+	}
 	if (!(*ptr >= '0' && *ptr <= '9'))
 		ft_getout("Invalid color definition");
 	c.red = ft_clamp_i(ft_atoi(ptr), 0, 255) / 255.0f;

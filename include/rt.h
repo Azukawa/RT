@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/11 15:46:23 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/15 15:09:06 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ typedef struct s_rt {
 	t_color		amb_col;
 	float		amb_p;
 	float		amb_int;
-	t_ray		ray_prime;
-	t_ray		ray_light;
+	t_ray		r_prm;
+	t_ray		r_lght;
 	float		uv_u;
 	float		uv_v;
 	t_object	*object;

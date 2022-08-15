@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:48:00 by eniini            #+#    #+#             */
-/*   Updated: 2022/08/02 15:15:18 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/15 13:55:59 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void	init_light(t_rt *rt, char *line)
 
 static void	init_mirror(t_object *object, char *line)
 {
-		char	*ptr;
-	
+	char	*ptr;
+
 	if (!line || *line == '\0')
 		ft_getout("Missing color definition/or mirror");
 	ptr = line + 1;
