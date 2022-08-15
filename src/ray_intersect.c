@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:14:57 by esukava           #+#    #+#             */
-/*   Updated: 2022/08/09 14:44:46 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/12 13:49:10 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_bool	ray_sphere_intersect(t_ray *r, t_object *s, float *t)
 	return (FALSE);
 }
 
-t_bool	ray_cyl_intersect(t_ray *r, t_object *obj, float *result)
+t_bool	ray_cyl_intersect(t_ray *r, t_object *obj, float *t)
 {
 	t_fvector	r2o;
 	t_fvector	abc;
@@ -73,9 +73,9 @@ t_bool	ray_cyl_intersect(t_ray *r, t_object *obj, float *result)
 	quadratic_equation(abc, &t0, &t1);
 	if (t0 < 0 && t1 > 0)
 		t0 = t1;
-	if ((t0 > 0) && (t0 < *result))
+	if ((t0 > 0) && (t0 < *t))
 	{
-		*result = t0;
+		*t = t0;
 		return (TRUE);
 	}
 	return (FALSE);
@@ -100,7 +100,7 @@ t_fvector r2o, float c_fctr)
 *	an infinite sized cone. [r] exists as a multiplier that denotes the angle
 *	cones' extension. 
 */
-t_bool	ray_cone_intersect(t_ray *r, t_object *obj, float *result)
+t_bool	ray_cone_intersect(t_ray *r, t_object *obj, float *t)
 {
 	float		t0;
 	float		t1;
@@ -114,12 +114,12 @@ t_bool	ray_cone_intersect(t_ray *r, t_object *obj, float *result)
 	quadratic_equation(abc, &t0, &t1);
 	if (t0 < 0 && t1 > 0)
 		t0 = t1;
-	if ((t0 > 0) && (t0 < *result))
+	if ((t0 > 0) && (t0 < *t))
 	{
 		abc = v_add(r->start, v_mult(r->dir, t0));
 		if ((v_dot(v_sub(abc, obj->pos), obj->dir) > 0))
 			return (FALSE);
-		*result = t0;
+		*t = t0;
 		return (TRUE);
 	}
 	return (FALSE);
