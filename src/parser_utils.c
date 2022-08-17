@@ -6,11 +6,21 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/08/15 15:33:59 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/17 15:12:41 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+
+static float	color_code_to_int(char *ptr)
+{
+	float	c;
+
+	if (!(*ptr >= '0' && *ptr <= '9'))
+		ft_getout("Invalid color definition");
+	c = ft_clamp_i(ft_atoi(ptr), 0, 255) / 255.0f;
+	return (c);
+}
 
 t_color	read_color(char *line)
 {
@@ -21,27 +31,18 @@ t_color	read_color(char *line)
 		ft_getout("Missing color definition");
 	ptr = line + 1;
 	if (*ptr == 'm')
-	{
-		printf("ptr = 'm'\n");
 		return ((t_color){0, 0, 0});
-	}
-	if (!(*ptr >= '0' && *ptr <= '9'))
-		ft_getout("Invalid color definition");
-	c.red = ft_clamp_i(ft_atoi(ptr), 0, 255) / 255.0f;
+	c.red = color_code_to_int(ptr);
 	ptr = ft_strchr(line, ',');
 	if (!ptr)
 		ft_getout("Invalid color definition! (missing RGB information)");
 	ptr = (ptr + 1);
-	if (!(*ptr >= '0' && *ptr <= '9'))
-		ft_getout("Invalid color definition! (Incorrect symbol)");
-	c.green = ft_clamp_i(ft_atoi(ptr), 0, 255) / 255.0f;
+	c.green = color_code_to_int(ptr);
 	ptr = ft_strchr(ptr, ',');
 	if (!ptr)
 		ft_getout("Invalid color definition! (missing RGB information)");
 	ptr = (ptr + 1);
-	if (!(*ptr >= '0' && *ptr <= '9'))
-		ft_getout("Invalid color definition! (Incorrect symbol)");
-	c.blue = ft_clamp_i(ft_atoi(ptr), 0, 255) / 255.0f;
+	c.blue = color_code_to_int(ptr);
 	return (c);
 }
 
@@ -112,7 +113,6 @@ void	read_cam(t_rt *rt, char *line)
 void	read_objcount(t_rt *rt, char *line)
 {
 	rt->objcount = ft_atoi(line);
-	ft_printf("objectcount: %u\n", rt->objcount);
 	if (!rt->objcount)
 		ft_getout("Invalid object count declaration!");
 	rt->object = (t_object *)malloc(sizeof(t_object) * rt->objcount);

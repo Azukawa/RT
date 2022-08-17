@@ -6,37 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:48:00 by eniini            #+#    #+#             */
-/*   Updated: 2022/08/15 13:55:59 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/17 14:50:34 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-
-static void	init_light(t_rt *rt, char *line)
-{
-	char		*ptr;
-	t_fvector	pos;
-
-	ptr = (line + 2);
-	pos = read_3dvec(ptr);
-	ptr = ft_strchr(ptr, ' ');
-	if (!ptr)
-		ft_getout("excplicitly defined light needs color definition");
-	rt->light.r = 0.5;
-	rt->light.pos = pos;
-	rt->light.color = read_color(ptr);
-}
-
-static void	init_mirror(t_object *object, char *line)
-{
-	char	*ptr;
-
-	if (!line || *line == '\0')
-		ft_getout("Missing color definition/or mirror");
-	ptr = line + 1;
-	if (*ptr == 'm')
-		object->mirror = 1;
-}
 
 /*
 *	Assumes being able to read two sets of 3d vector values followed by
@@ -60,7 +34,6 @@ static void	init_object(t_rt *rt, char *ptr, char c, int obj_n)
 		ft_getout("Invalid object init! (Incorrect delimiter character)");
 	r = ft_atof(ptr + 1);
 	ptr = ft_strchr(ptr + 1, ' ');
-	rt->object[obj_n].mirror = 0;
 	if (c == 's')
 		init_sphere(&rt->object[obj_n], pos, r, read_color(ptr));
 	else

@@ -6,63 +6,11 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/08/15 15:10:25 by alero            ###   ########.fr       */
+/*   Updated: 2022/08/17 15:09:33 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-
-static t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, \
-t_fvector dist)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < rt->objcount)
-	{
-		rt->t = v_len(v_sub(light_ray.start, rt->object[i].pos));
-		if (i != cur_obj && (ray_object_intersect(&light_ray, &rt->object[i], \
-&rt->t)) && v_len(dist) > rt->t)
-			return (TRUE);
-		i++;
-	}
-	return (FALSE);
-}
-
-/*
-*	Returns a vector representing the relfection direction given the
-*	incident (ray hitting a surface coming from a light source) [I] and surface
-*	normal [N] vectors.
-*	I - (2 * dot(N, I) * N).
-static t_fvector	reflect(t_fvector incident, t_fvector normal)
-{
-	float	difference;
-
-	difference = 2.0f * v_dot(normal, incident);
-	return (v_sub(v_mult(normal, difference), incident));
-}*/
-
-/*
-*	[Mat] is the current object material data.
-*	[lray] holds the direction of light and the hit point in question.
-*	[n] is the given object surface normal.
-*/
-static t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix)
-{
-	float	phong;
-	float	lambert;
-	float	difference;
-	t_color	final;
-
-	difference = 2.0f * v_dot(n, lray.dir);
-	phong = fmaxf(v_dot(v_sub(v_mult(n, difference), lray.dir), \
-			v_normalize(rt->cam.pos)), 0.0f);
-	phong = powf(ft_clamp_d(phong, 0.0f, 1.0f), ROUGHNESS);
-	lambert = v_dot(lray.dir, n);
-	mix = col_blend(mix, rt->light.color, (lambert * 0.8));
-	final = col_add(mix, col_multiply((t_color){1, 1, 1}, phong), phong);
-	return (final);
-}
 
 /*
 *	[Ray] is the point of interception between ray & [cur_obj].
@@ -104,7 +52,8 @@ void	hit_mirror(t_rt *rt, int *cur_obj, float *t, unsigned int depth)
 	n = find_object_normal(&rt->object[*cur_obj], &rt->r_prm);
 	*t = RAY_LIMIT;
 	*cur_obj = -1;
-	rt->r_prm.dir = v_mult(v_mult(v_sub(rt->r_prm.dir, n), 2.0f), v_dot(rt->r_prm.dir, n));
+	rt->r_prm.dir = v_mult(v_mult(v_sub(rt->r_prm.dir, n), 2.0f), \
+v_dot(rt->r_prm.dir, n));
 	v_normalize(rt->r_prm.dir);
 	while (i < rt->objcount)
 	{	
@@ -148,13 +97,12 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if (rt->object[cur_obj].mirror == 1)
 		hit_mirror(rt, &cur_obj, &t, 5);
-	if (draw_light(rt, &t, x, y))
-		return ;
-	if (cur_obj == -1)
+	if (draw_light(rt, &t, x, y) || cur_obj == -1)
 		return ;
 	if (rt->is_grayscale)
 		draw_pixel(x, y, &rt->rend.win_buffer, \
 			convert_to_grayscale(col_to_uint(ray_col(rt, cur_obj, t))));
 	else
-		draw_pixel(x, y, &rt->rend.win_buffer, col_to_uint(ray_col(rt, cur_obj, t)));
+		draw_pixel(x, y, &rt->rend.win_buffer, \
+col_to_uint(ray_col(rt, cur_obj, t)));
 }
