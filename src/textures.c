@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/02 16:33:42 by eniini            #+#    #+#             */
-/*   Updated: 2022/06/08 00:21:22 by eniini           ###   ########.fr       */
+/*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
+/*   Updated: 2022/09/13 15:38:33 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,38 +18,22 @@
 */
 t_color	apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc)
 {
-	t_bool	yresult;
-	t_bool	xresult;
-	t_bool	result;
+	t_bool	resx;
+	t_bool	resy;
 
-	if (rt->object[cur_obj].type == PLANE)
+	resx = FALSE;
+	resy = FALSE;
+	if(rt->object[cur_obj].type == PLANE)
 		scale = 1.0f;
-	if (((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
-		yresult = TRUE;
-	else
-		yresult = FALSE;
-	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
-		xresult = TRUE;
-	else
-		xresult = FALSE;
-	result = (xresult ^ yresult);
-	if (result)
+	if(((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
+		resx = TRUE;
+	if(((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
+		resy = TRUE;
+	if(resy ^ resx)
 		return (col_lerp(oc, (t_color){0, 0, 0}, 0.5f));
 	else
 		return (col_lerp(oc, (t_color){1, 1, 1}, 0.5f));
 }
-
-/*
-*	TESTING
-t_color	apply_texture(t_rt *rt, float scale, int cur_obj)
-{
-	t_fvector v = (t_fvector){rt->uv_u * scale, rt->uv_v * scale, 0, 1};
-	float	a = 20.0f;
-	float	b = 50.0f;
-	float	t = (a * rt->uv_u + b * rt->uv_v);
-	float	s = t - floorf(t);
-	return (col_blend((t_color){0, 0, 0}, (t_color){1, 1, 1}, s));
-}*/
 
 /*
 *	Were translating a Cartesian coordinate into spherical coordinate into an
@@ -70,19 +54,12 @@ static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 	rt->uv_v *= 0.5;
 }
 
-/*
-*	TODO: check plane normal against POV to correctly UV wrap planes facing
-*	the opposite direction or ones directly adjacent (swap z -> y).
-*/
 static void	planar_map(t_rt *rt, t_fvector hp)
 {
 	rt->uv_u = fmodf(hp.x, 1.0f);
 	rt->uv_v = fmodf(hp.z, 1.0f);
 }
 
-/*
-*	TODO: needs to work on non-zero positions and with angled directions.
-*/
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
 	float	theta;
@@ -92,10 +69,6 @@ static void	cylindrical_map(t_rt *rt, t_fvector pos)
 	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);
 }
 
-/*
-*	TODO: make sure you cant access UV coordinates with invalid shapes.
-*	[bool textureable] or something like that.
-*/
 void	uv_map(t_rt *rt, t_ray *ray, int cur_obj)
 {
 	if (rt->object[cur_obj].type == SPHERE)
