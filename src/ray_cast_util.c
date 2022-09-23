@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:13:52 by esukava           #+#    #+#             */
-/*   Updated: 2022/08/02 16:02:40 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/23 13:22:14 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ray_trough_screen(t_rt *rt, int x, int y)
 	pixel.z = 1;
 	pixel = v_rot_xyz(pixel, rt->cam.rot);
 	ret.dir = v_normalize(pixel);
-	rt->ray_prime = ret;
+	rt->r_prm = ret;
 }
 
 t_fvector	find_object_normal(t_object *o, t_ray *ray)
@@ -83,7 +83,7 @@ void	quadratic_equation(t_fvector abc, float *t0, float *t1)
 
 t_bool	draw_light(t_rt *rt, float *t, int x, int y)
 {
-	if (ray_sphere_intersect(&rt->ray_prime, &rt->light, t))
+	if (ray_sphere_intersect(&rt->r_prm, &rt->light, t))
 	{
 		draw_pixel(x, y, &rt->rend.win_buffer, 0xFFFF00);
 		return (TRUE);
