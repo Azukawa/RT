@@ -24,7 +24,9 @@ SRC_LIST = draw_pixel.c \
 		parser_utils.c \
 		parser_shapes.c \
 		parser_rotations.c \
-		parser_matops.c
+		parser_matops.c \
+		ray_cast_util2.c \
+		parser_utils2.c
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
 OBJS = $(addprefix $(OBJ_DIR),$(SRC_LIST:.c=.o))
 
