@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/23 19:48:08 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 23:14:53 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	check_keyevents(t_rt *rt, SDL_Event *e)
 {
 	if (e->key.keysym.sym == SDLK_d)
-		rt->light.pos.z += 5;
+		rt->light[0].pos.z += 5;
 	if (e->key.keysym.sym == SDLK_w)
-		rt->light.pos.x -= 5;
+		rt->light[0].pos.x -= 5;
 	if (e->key.keysym.sym == SDLK_a)
-		rt->light.pos.z -= 5;
+		rt->light[0].pos.z -= 5;
 	if (e->key.keysym.sym == SDLK_s)
-		rt->light.pos.x += 5;
+		rt->light[0].pos.x += 5;
 	if (e->key.keysym.sym == SDLK_q)
-		rt->light.pos.y += 5;
+		rt->light[0].pos.y += 5;
 	if (e->key.keysym.sym == SDLK_e)
-		rt->light.pos.y -= 5;
+		rt->light[0].pos.y -= 5;
 	if (e->key.keysym.sym == SDLK_g && rt->is_grayscale)
 		rt->is_grayscale = FALSE;
 	else if (e->key.keysym.sym == SDLK_g && !rt->is_grayscale)
@@ -51,7 +51,6 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 				rt->rend.run = FALSE;
 			if (e->key.keysym.sym == SDLK_p)
 				create_bmp("RT screencap.bmp", &rt->rend.win_buffer);
-			printf("amb_int\t= %f\namb_p\t= %f\n", rt->amb_int, rt->amb_p);
 		}
 		else if (e->type == SDL_WINDOWEVENT \
 		&& e->window.event == SDL_WINDOWEVENT_CLOSE)

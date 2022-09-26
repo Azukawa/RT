@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/26 15:29:52 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 22:32:17 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,11 @@ typedef struct s_rt {
 	float		uv_v;
 	t_object	*object;
 	uint		objcount;
-	t_object	light;
+	t_object	light[10];
 	t_color		colors[10];
 	t_bool		is_grayscale;
-	int	curobj;
+	int			curobj;
+	int			light_count;
 }				t_rt;
 
 void		draw_pixel(uint32_t x, uint32_t y, t_buffer *buf, uint32_t color);

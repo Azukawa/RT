@@ -83,7 +83,7 @@ void	quadratic_equation(t_fvector abc, float *t0, float *t1)
 
 t_bool	draw_light(t_rt *rt, float *t, int x, int y)
 {
-	if (ray_sphere_intersect(&rt->r_prm, &rt->light, t))
+	if (ray_sphere_intersect(&rt->r_prm, &rt->light[rt->light_count], t))
 	{
 		draw_pixel(x, y, &rt->rend.win_buffer, 0xFFFF00);
 		return (TRUE);

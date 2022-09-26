@@ -106,8 +106,8 @@ void	read_cam(t_rt *rt, char *line)
 		ft_printf("no ambient light set!\n");
 		rt->amb_col = (t_color){0, 0, 0};
 	}
-	rt->light.pos = rt->cam.pos;
-	rt->light.color = (t_color){1, 1, 1};
+	rt->light[rt->light_count].pos = rt->cam.pos;
+	rt->light[rt->light_count].color = (t_color){1, 1, 1};
 }
 
 void	read_objcount(t_rt *rt, char *line)
