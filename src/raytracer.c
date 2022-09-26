@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/26 12:33:19 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 14:20:03 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,16 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, int cur_obj, t_color *c)
 	t_ray		lr;
 	t_fvector	dist;
 	t_fvector	n;
-	
-//	*c = col_add(col_multiply(rt->object[cur_obj].color, rt->amb_int), rt->amb_col, rt->amb_int);
-//	*c = col_add(rt->object[cur_obj].color, rt->amb_col, rt->amb_int); // original
+
 	n = find_object_normal(&rt->object[cur_obj], ray);
 	if (v_dot(n, ray->dir) > 0)
-		n =	v_mult(n, -1); //this didnt have the "n ="
+		n = v_mult(n, -1);
 	dist = v_sub(rt->light.pos, ray->start);
 	lr.start = v_add(ray->start, v_mult(n, 0.0001f));
 	lr.dir = v_normalize(dist);
-	if ((v_dot(n, dist) <= 0)  || in_shadow(rt, lr, cur_obj, dist))
-	{
-	//	*c = col_multiply(*c, 0.2f);  //make thing look good :)
-//	*c = col_multiply(*c, rt->amb_int);
+	if ((v_dot(n, dist) <= 0) || in_shadow(rt, lr, cur_obj, dist))
 		return ;
-	}
-
-//	*c = col_multiply(*c, 0.2f);  //make thing look good :)
 	*c = assign_color(rt, lr, n, *c, cur_obj);
-//	*c = col_multiply(*c, rt->amb_int);
 }
 
 //this function is called if ray_prime hits mirror object.
@@ -79,8 +70,6 @@ static t_color	ray_col(t_rt *rt, int cur_obj, float t)
 		v_mult(rt->r_prm.dir, t));
 	rt->r_lght.dir = rt->r_prm.dir;
 	uv_map(rt, &rt->r_lght, cur_obj);
-//	mixer = col_add(rt->object[cur_obj].color, rt->amb_col, rt->amb_int); //this was moved in tto calculate_lighting to try to fix min amb color
-//	mixer = col_add((t_color){0,0,0}, rt->object[cur_obj].color, rt->amb_int);
 	mixer = col_multiply(rt->object[cur_obj].color, rt->amb_int);
 	calculate_lighting(rt, &rt->r_lght, cur_obj, &mixer);
 	mixer = col_add(mixer, apply_check_pattern(rt, 25, cur_obj, mixer), 0.3f);

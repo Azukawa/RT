@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/09/25 19:05:30 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 14:17:45 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,16 @@ t_color	apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc)
 
 	resx = FALSE;
 	resy = FALSE;
-	if(rt->object[cur_obj].type == PLANE)
+	if (rt->object[cur_obj].type == PLANE)
 		scale = 1.0f;
-	if(((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
+	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
 		resx = TRUE;
-	if(((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
+	if (((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
 		resy = TRUE;
-	if(resy ^ resx)
+	if (resy ^ resx)
 		return (col_lerp(oc, (t_color){0, 0, 0}, 0.5f));
 	else
 		return (oc);
-		//	return (col_lerp(oc, (t_color){1, 1, 1}, 0.5f));
-	
 }
 
 /*
