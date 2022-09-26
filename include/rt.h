@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/25 17:18:03 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 15:29:52 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_rt {
 	t_object	light;
 	t_color		colors[10];
 	t_bool		is_grayscale;
+	int	curobj;
 }				t_rt;
 
 void		draw_pixel(uint32_t x, uint32_t y, t_buffer *buf, uint32_t color);
@@ -119,9 +120,9 @@ t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
 t_color		col_add(t_color base, t_color mix, float p);
 //texturing
-void		uv_map(t_rt *rt, t_ray *ray, int cur_obj);
-t_color		apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc);
-t_color		apply_texture(t_rt *rt, float scale, int cur_obj);
+void		uv_map(t_rt *rt, t_ray *ray);
+t_color		apply_check_pattern(t_rt *rt, float scale, t_color oc);
+t_color		apply_texture(t_rt *rt, float scale);
 //parser
 t_fvector	read_3dvec(char *line);
 t_color		read_color(char *line);
@@ -142,8 +143,7 @@ t_mat4		mm_multiply_matrix(t_mat4 ma, t_mat4 mb);
 
 void	init_mirror(t_object *object, char *line);
 void	init_light(t_rt *rt, char *line);
-t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix, int cur_obj);
-t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, \
-t_fvector dist);
+t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix);
+t_bool	in_shadow(t_rt *rt, t_ray light_ray, t_fvector dist);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/09/26 14:17:45 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 15:28:01 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 *	Returns a color corresponding to a checkered pattern. [Scale] directly
 *	corresponds to how many tiles are generated onto the plane.
 */
-t_color	apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc)
+t_color	apply_check_pattern(t_rt *rt, float scale, t_color oc)
 {
 	t_bool	resx;
 	t_bool	resy;
 
 	resx = FALSE;
 	resy = FALSE;
-	if (rt->object[cur_obj].type == PLANE)
+	if (rt->object[rt->curobj].type == PLANE)
 		scale = 1.0f;
 	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
 		resx = TRUE;
@@ -69,12 +69,12 @@ static void	cylindrical_map(t_rt *rt, t_fvector pos)
 	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);
 }
 
-void	uv_map(t_rt *rt, t_ray *ray, int cur_obj)
+void	uv_map(t_rt *rt, t_ray *ray)
 {
-	if (rt->object[cur_obj].type == SPHERE)
-		spherical_map(rt, ray->start, rt->object[cur_obj].pos);
-	if (rt->object[cur_obj].type == PLANE)
+	if (rt->object[rt->curobj].type == SPHERE)
+		spherical_map(rt, ray->start, rt->object[rt->curobj].pos);
+	if (rt->object[rt->curobj].type == PLANE)
 		planar_map(rt, ray->start);
-	if (rt->object[cur_obj].type == CYL)
+	if (rt->object[rt->curobj].type == CYL)
 		cylindrical_map(rt, ray->start);
 }
