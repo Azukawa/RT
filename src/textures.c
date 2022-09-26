@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/09/13 15:38:33 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/25 19:05:30 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ t_color	apply_check_pattern(t_rt *rt, float scale, int cur_obj, t_color oc)
 	if(resy ^ resx)
 		return (col_lerp(oc, (t_color){0, 0, 0}, 0.5f));
 	else
-		return (col_lerp(oc, (t_color){1, 1, 1}, 0.5f));
+		return (oc);
+		//	return (col_lerp(oc, (t_color){1, 1, 1}, 0.5f));
+	
 }
 
 /*

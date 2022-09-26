@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/07 23:50:08 by eniini           ###   ########.fr       */
+/*   Updated: 2022/09/23 15:20:19 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	init(t_rt *rt)
 		exit(1);
 	rt->rend.run = TRUE;
 	rt->amb_col = (t_color){0, 0, 0};
-	rt->amb_int = 0.2f;
+	rt->amb_int = 0.05f;
 }
 
 static void	cleanup(t_rt *rt)

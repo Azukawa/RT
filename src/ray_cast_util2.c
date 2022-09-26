@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:53:44 by alero             #+#    #+#             */
-/*   Updated: 2022/08/17 14:57:55 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/26 12:27:49 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_fvector dist)
 *	[lray] holds the direction of light and the hit point in question.
 *	[n] is the given object surface normal.
 */
-t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix)
+t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix, int cur_obj)
 {
 	float	phong;
 	float	lambert;
@@ -46,8 +46,11 @@ t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix)
 			v_normalize(rt->cam.pos)), 0.0f);
 	phong = powf(ft_clamp_d(phong, 0.0f, 1.0f), ROUGHNESS);
 	lambert = v_dot(lray.dir, n);
-	mix = col_blend(mix, rt->light.color, (lambert * 0.8));
+//	mix = col_blend(mix, rt->light.color, (lambert * 0.8)); // original
+//	mix = col_blend(mix, col_add(rt->object[cur_obj].color, rt->light.color, 0.5), (lambert * 0.8));
+	mix = col_blend(mix, rt->object[cur_obj].color, (lambert * 0.8)); //this one works
 	final = col_add(mix, col_multiply((t_color){1, 1, 1}, phong), phong);
+//	final = col_multiply(col_add(mix, col_multiply((t_color){1, 1, 1}, phong), phong), rt->amb_int);
 	return (final);
 }
 

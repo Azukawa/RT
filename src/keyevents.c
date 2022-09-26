@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/02 17:46:45 by eniini           ###   ########.fr       */
+/*   Updated: 2022/09/23 19:48:08 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 				rt->rend.run = FALSE;
 			if (e->key.keysym.sym == SDLK_p)
 				create_bmp("RT screencap.bmp", &rt->rend.win_buffer);
+			printf("amb_int\t= %f\namb_p\t= %f\n", rt->amb_int, rt->amb_p);
 		}
 		else if (e->type == SDL_WINDOWEVENT \
 		&& e->window.event == SDL_WINDOWEVENT_CLOSE)

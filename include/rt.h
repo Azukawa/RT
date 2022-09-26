@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/08/17 15:02:34 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/25 17:18:03 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_mat4		mm_multiply_matrix(t_mat4 ma, t_mat4 mb);
 
 void	init_mirror(t_object *object, char *line);
 void	init_light(t_rt *rt, char *line);
-t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix);
+t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix, int cur_obj);
 t_bool	in_shadow(t_rt *rt, t_ray light_ray, unsigned int cur_obj, \
 t_fvector dist);
 
