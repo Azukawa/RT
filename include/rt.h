@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/26 22:32:17 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/29 15:38:30 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_rt {
 	t_bool		is_grayscale;
 	int			curobj;
 	int			light_count;
+	int			cur_light;
 }				t_rt;
 
 void		draw_pixel(uint32_t x, uint32_t y, t_buffer *buf, uint32_t color);
@@ -119,6 +120,7 @@ uint32_t	col_to_uint(t_color color);
 t_color		col_lerp(t_color c1, t_color c2, float p);
 t_color		col_blend(t_color base, t_color mix, float p);
 t_color		col_multiply(t_color color, float m);
+t_color		col_mult_colors(t_color a, t_color b);
 t_color		col_add(t_color base, t_color mix, float p);
 //texturing
 void		uv_map(t_rt *rt, t_ray *ray);

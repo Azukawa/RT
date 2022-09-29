@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/06/07 22:49:38 by eniini           ###   ########.fr       */
+/*   Updated: 2022/09/29 18:17:02 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,35 @@ t_color	col_blend(t_color base, t_color mix, float p)
 	result.red = pm * base.red + p * mix.red;
 	result.green = pm * base.green + p * mix.green;
 	result.blue = pm * base.blue + p * mix.blue;
+	return (result);
+}
+
+static t_color	col_expand(t_color color)
+{
+	color.red = color.red * 255.0f;
+	color.green = color.green * 255.0f;
+	color.blue = color.blue * 255.0f;
+	return(color);
+}
+
+static t_color	col_shrink(t_color color)
+{
+	color.red = color.red / 255.0f;
+	color.green = color.green / 255.0f;
+	color.blue = color.blue / 255.0f;
+	return(color);
+}
+
+t_color	col_mult_colors(t_color a, t_color b)
+{
+	t_color result;
+
+	//a = col_shrink(a);
+	//b = col_shrink(b);
+	result.red = a.red * b.red;
+	result.green = a.green * b.green;
+	result.blue = a.blue * b.blue;
+	//result = col_expand(result);
 	return (result);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:53:44 by alero             #+#    #+#             */
-/*   Updated: 2022/09/26 15:33:47 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/29 15:41:31 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ t_color	assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix)
 			v_normalize(rt->cam.pos)), 0.0f);
 	phong = powf(ft_clamp_d(phong, 0.0f, 1.0f), ROUGHNESS);
 	lambert = v_dot(lray.dir, n);
-	mix = col_blend(mix, rt->object[rt->curobj].color, (lambert * 0.8));
-	final = col_add(mix, col_multiply((t_color){1, 1, 1}, phong), phong);
+//	mix = col_blend(mix, rt->object[rt->curobj].color, (lambert * 0.8)); // original
+//	mix = col_blend(mix, col_blend(rt->object[rt->curobj].color, rt->light[rt->cur_light].color, lambert * 0.8/* * 0.8f*/), (lambert/* * 0.8*/));
+	mix = col_blend(mix, col_mult_colors(rt->object[rt->curobj].color, rt->light[rt->cur_light].color), (lambert * 0.8)); // original
+//	final = col_add(mix, col_multiply((t_color){1, 1, 1}, phong), phong); //og
+	final = col_add(mix, col_multiply(rt->light[rt->cur_light].color, phong), phong);
 	return (final);
 }
 
