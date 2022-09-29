@@ -19,6 +19,7 @@ SRC_LIST = draw_pixel.c \
 		grayscale.c \
 		bmp_screencap.c \
 		color_manip.c \
+		color_manip2.c \
 		textures.c \
 		parser_main.c \
 		parser_utils.c \

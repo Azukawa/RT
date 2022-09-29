@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/09/29 18:17:02 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/29 19:24:05 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,35 +57,6 @@ t_color	col_blend(t_color base, t_color mix, float p)
 	return (result);
 }
 
-static t_color	col_expand(t_color color)
-{
-	color.red = color.red * 255.0f;
-	color.green = color.green * 255.0f;
-	color.blue = color.blue * 255.0f;
-	return(color);
-}
-
-static t_color	col_shrink(t_color color)
-{
-	color.red = color.red / 255.0f;
-	color.green = color.green / 255.0f;
-	color.blue = color.blue / 255.0f;
-	return(color);
-}
-
-t_color	col_mult_colors(t_color a, t_color b)
-{
-	t_color result;
-
-	//a = col_shrink(a);
-	//b = col_shrink(b);
-	result.red = a.red * b.red;
-	result.green = a.green * b.green;
-	result.blue = a.blue * b.blue;
-	//result = col_expand(result);
-	return (result);
-}
-
 t_color	col_multiply(t_color color, float m)
 {
 	t_color	result;
@@ -93,24 +64,5 @@ t_color	col_multiply(t_color color, float m)
 	result.red = ft_clamp_d(color.red * m, 0.0f, 1.0f);
 	result.green = ft_clamp_d(color.green * m, 0.0f, 1.0f);
 	result.blue = ft_clamp_d(color.blue * m, 0.0f, 1.0f);
-	return (result);
-}
-
-t_color	col_add(t_color base, t_color mix, float p)
-{
-	t_color	result;
-
-	if (p == 0.0f)
-		return (base);
-	if (p == 1.0f)
-	{
-		result.red = ft_clamp_d(base.red + mix.red, 0.0f, 1.0f);
-		result.green = ft_clamp_d(base.green + mix.green, 0.0f, 1.0f);
-		result.blue = ft_clamp_d(base.blue + mix.blue, 0.0f, 1.0f);
-		return (result);
-	}
-	result.red = ft_clamp_d(base.red + (p * mix.red), 0.0f, 1.0f);
-	result.green = ft_clamp_d(base.green + (p * mix.green), 0.0f, 1.0f);
-	result.blue = ft_clamp_d(base.blue + (p * mix.blue), 0.0f, 1.0f);
 	return (result);
 }
