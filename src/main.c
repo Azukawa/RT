@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/28 16:31:53 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 17:57:05 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ static void	init(t_rt *rt)
 	if (!rt->rend.win_tex)
 		exit(1);
 	rt->rend.run = TRUE;
-	rt->amb_col = (t_color){0, 0, 0};
-	rt->amb_int = 0.05f;
+	rt->amb_col = (t_color){1, 1, 1};
 }
 
 static void	cleanup(t_rt *rt)

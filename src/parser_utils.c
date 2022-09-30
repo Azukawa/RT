@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/08/17 15:12:41 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 19:23:05 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ void	read_cam(t_rt *rt, char *line)
 		ft_printf("no ambient light set!\n");
 		rt->amb_col = (t_color){0, 0, 0};
 	}
-	rt->light[rt->light_count].pos = rt->cam.pos;
-	rt->light[rt->light_count].color = (t_color){1, 1, 1};
+	rt->light[0].pos = rt->cam.pos;
+	rt->light[0].color = (t_color){1, 1, 1};
 }
 
 void	read_objcount(t_rt *rt, char *line)

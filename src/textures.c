@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/09/30 15:37:57 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 19:23:36 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_color	apply_check_pattern(t_rt *rt, float scale, t_color oc)
 
 	resx = FALSE;
 	resy = FALSE;
+	if (rt->object[rt->curobj].type == CONE)
+		return (oc);
 	if (rt->object[rt->curobj].type == PLANE)
 		scale = 1.0f;
 	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)

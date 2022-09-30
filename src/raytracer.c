@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/29 19:02:30 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 19:22:50 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_color	ray_col(t_rt *rt, float t)
 		v_mult(rt->r_prm.dir, t));
 	rt->r_lght.dir = rt->r_prm.dir;
 	uv_map(rt, &rt->r_lght);
-	mixer = col_multiply(rt->object[rt->curobj].color, rt->amb_int);
+	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
 	while (rt->cur_light < rt->light_count)
 	{
 		calculate_lighting(rt, &rt->r_lght, &mixer);
