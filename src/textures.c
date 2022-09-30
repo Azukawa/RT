@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/09/26 15:28:01 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 15:37:57 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 static void	planar_map(t_rt *rt, t_fvector hp)
 {
 	rt->uv_u = fmodf(hp.x, 1.0f);
-	rt->uv_v = fmodf(hp.z, 1.0f);
+	rt->uv_v = fmodf(hp.y, 1.0f);
 }
 
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
