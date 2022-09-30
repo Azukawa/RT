@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/30 19:22:50 by alero            ###   ########.fr       */
+/*   Updated: 2022/09/30 19:54:15 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static t_color	ray_col(t_rt *rt, float t)
 		calculate_lighting(rt, &rt->r_lght, &mixer);
 		rt->cur_light++;
 	}
-	mixer = col_blend(mixer, apply_check_pattern(rt, 25, mixer), 0.7f);
+	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
 	return (mixer);
 }
 
