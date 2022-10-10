@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:56:17 by esukava           #+#    #+#             */
-/*   Updated: 2022/06/07 10:11:40 by eniini           ###   ########.fr       */
+/*   Updated: 2022/10/01 19:38:13 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_color {
 	float	blue;
 }				t_color;
 
-//Datatype to store an ARBG image data. Each pixel can be found by calculating
+//Datatype to store an ARGB image data. Each pixel can be found by calculating
 //[(h * y) + (x % w)]
 typedef struct s_buffer {
 	uint32_t	*px;

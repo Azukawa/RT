@@ -6,11 +6,34 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/10/06 16:09:18 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/10 16:54:42 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+
+t_color	apply_texture(t_rt *rt)
+{
+	float scale = 40;
+//	printf("pixeltype = %d\n", SDL_PIXELTYPE(rt->surf->format->format));
+//	printf("pixelORDER = %d\n", SDL_PIXELORDER(rt->surf->format->format));
+//	printf("pixelayout = %d\n", SDL_PIXELLAYOUT(rt->surf->format->format));
+	t_color ret;
+	unsigned int	t_w = rt->surf->w;
+	unsigned int	t_h = rt->surf->h;
+	unsigned int tex_x = fmodf(rt->uv_u * scale, t_w);
+	unsigned int tex_y = fmodf(rt->uv_v * scale, t_h);
+	
+//	unsigned int tex_x = rt->uv_u * t_w;//fmodf(rt->uv_u, t_w);
+//	unsigned int tex_y = rt->uv_v * t_h;//fmodf(rt->uv_v, t_h);
+//static int timo;
+//	if (timo > -1 && timo < 200)
+//		printf("tex_x = %d\ttex_y = %d\t uv_u = %f\tuv_v = %f\n", tex_x, tex_y, rt->uv_u, rt->uv_v);
+//	timo++;	
+//	ret = uint_to_col(((uint32_t *)rt->surf->pixels)[(tex_x + tex_y * t_w) *4]);
+	ret = uint_to_col(((uint32_t *)rt->surf->pixels)[(tex_x + tex_y * t_w)]);
+	return(ret);
+}
 
 /*
 *	Returns a color corresponding to a checkered pattern. [Scale] directly
@@ -23,7 +46,7 @@ t_color	apply_check_pattern(t_rt *rt, float scale, t_color oc)
 
 	resx = FALSE;
 	resy = FALSE;
-	if (rt->object[rt->curobj].type == CONE)
+	if (rt->object[rt->curobj].type == CONE || rt->object[rt->curobj].type == CYL || rt->object[rt->curobj].mirror)
 		return (oc);
 	if (rt->object[rt->curobj].type == PLANE)
 		scale = scale / 25;
@@ -55,60 +78,33 @@ static void	spherical_map(t_rt *rt, t_fvector hp, t_fvector pos)
 	rt->uv_v = 0.5f + (asinf(n.y) / M_PI);
 	rt->uv_v *= 0.5;
 }
-/*
-t_fvector	v_multiply(t_fvector a, t_fvector b)
-{
-t_vec	m3_multiply_vec(t_m3 m, t_vec v)
-{
-	t_vec	ret;
 
-	ret.x = v.x * m.m[0][0] + v.y * m.m[0][1] + v.z * m.m[0][2];
-	ret.y = v.x * m.m[1][0] + v.y * m.m[1][1] + v.z * m.m[1][2];
-	ret.z = v.x * m.m[2][0] + v.y * m.m[2][1] + v.z * m.m[2][2];
-	return (ret);
-}
-}
-*/
 static void	planar_map(t_rt *rt, t_fvector hp)
 {
-	t_fvector n;
-	static int bing;
-	t_fvector	e1, e2;
+	t_fvector	n;
+	t_fvector	e1;
+	t_fvector	e2;
+
 	n = rt->object[rt->curobj].dir;
-	if(bing == 100)
-	{
-		printf("n.x = %f\tn.y = %f\tn.z = %f\n", n.x, n.y, n.z);
-		printf("hp.x = %f\thp.y = %f\thp.z = %f\n", hp.x, hp.y, hp.z);
-	}
-//	n = v_sub(n, (t_fvector){0, 1, 0});
-//	n = (t_fvector){RAD_TO_DEG * n.x, RAD_TO_DEG * n.y, RAD_TO_DEG * n.z};
-//	n = v_rot_xyz(hp, n);
-	e1 = v_normalize(v_cross(n, (t_fvector){1, 0, 0}));
+	e1 = v_normalize(v_cross(n, (t_fvector){1, 0, 0, 0}));
 	e2 = v_normalize(v_cross(n, e1));
-//	if(bing == 100)
-//		printf("n.x = %f\tn.y = %f\tn.z = %f\n", n.x, n.y, n.z);
-//	rt->uv_u = fmodf(n.x, 1.0f); //og
-//	rt->uv_v = fmodf(n.z, 1.0f); //og
+//	rt->uv_u = fabs(fmodf(v_dot(e1, hp), 1)); 
+//	rt->uv_v = fabs(fmodf(v_dot(e2, hp), 1));
+	rt->uv_u = fabs(v_dot(e1, hp)); 
+	rt->uv_v = fabs(v_dot(e2, hp));
 
-
-
-	rt->uv_u = v_dot(e1, hp); 
-	rt->uv_v = v_dot(e2, hp);
-//	if(bing == 100){
-//		printf("cam posx = %f\tray_startx = %f\n", rt->cam.pos.x, rt->r_prm.start.x);
-//		printf("cam posy = %f\tray_starty = %f\n", rt->cam.pos.y, rt->r_prm.start.y);
-//	}
-//	rt->uv_u = rt->cam.pos.x + rt->r_prm.dir.x * iso_t;
-//	rt->uv_v = rt->cam.pos.y + rt->r_prm.dir.y * iso_t;
-
-
-	bing++;
+//	rt->uv_u = v_dot(e1, hp); 
+//	rt->uv_v = v_dot(e2, hp);
 }
 
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
 	float	theta;
-
+	t_fvector	n, dir;
+	
+	dir = rt->object[rt->curobj].dir;
+//	dir = (t_fvector){RAD_TO_DEG * dir.x, RAD_TO_DEG * dir.y, RAD_TO_DEG * dir.z};
+	pos = v_rot_xyz(pos, dir);
 	theta = atan2f(pos.x, pos.z);
 	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);
 	rt->uv_v = fmodf(pos.y, (2 * M_PI)) * 1 / (2 * M_PI);

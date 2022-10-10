@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/30 17:57:05 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/10 12:34:18 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ static void	init(t_rt *rt)
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_W, WIN_H);
 	if (!rt->rend.win_tex)
 		exit(1);
+	rt->surf = SDL_LoadBMP("./textures/tex_640x426.bmp");
+	if (!rt->surf)
+	{
+		printf("Failed to load texture");
+		exit(1);
+	}
+	printf("%p\n", rt->surf->pixels);
 	rt->rend.run = TRUE;
 	rt->amb_col = (t_color){1, 1, 1};
 }
@@ -37,6 +44,7 @@ static void	cleanup(t_rt *rt)
 	SDL_DestroyTexture(rt->rend.win_tex);
 	SDL_DestroyRenderer(rt->rend.renderer);
 	SDL_DestroyWindow(rt->rend.win);
+	SDL_FreeSurface(rt->surf);
 	free(rt->rend.win_buffer.px);
 	free(rt->object);
 	SDL_Quit();
@@ -101,6 +109,7 @@ int	main(int argc, char **argv)
 	}
 	init(&rt);
 	read_file(&rt, argv[1]);
+	apply_texture(&rt);
 	while (rt.rend.run)
 		loop(&rt);
 	cleanup(&rt);

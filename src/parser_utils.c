@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/09/30 19:55:28 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/09 18:19:31 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_color	read_color(char *line)
 		ft_getout("Missing color definition");
 	ptr = line + 1;
 	if (*ptr == 'm')
-		return ((t_color){0, 0, 0});
+		return ((t_color){0.7, 0.7, 0.7});
 	c.red = color_code_to_int(ptr);
 	ptr = ft_strchr(line, ',');
 	if (!ptr)
@@ -124,6 +124,7 @@ void	read_objcount(t_rt *rt, char *line)
 	if (!rt->objcount)
 		ft_getout("Invalid object count declaration!");
 	rt->object = (t_object *)malloc(sizeof(t_object) * rt->objcount);
+	ft_bzero(rt->object, sizeof(t_object) * rt->objcount);
 	if (!rt->object)
 		ft_getout("Failed to allocate memory for objects.");
 }

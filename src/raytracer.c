@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/30 19:54:15 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/10 16:53:39 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, t_color *c)
 	n = find_object_normal(&rt->object[rt->curobj], ray);
 	if (v_dot(n, ray->dir) > 0)
 		n = v_mult(n, -1);
-	dist = v_sub(rt->light[rt->cur_light].pos, ray->start);
+	dist = v_sub(rt->light[rt->cur_light].pos, ray->start); ///hoxhoxhox
 	lr.start = v_add(ray->start, v_mult(n, 0.0001f));
 	lr.dir = v_normalize(dist);
 	if (in_shadow(rt, lr, dist))
@@ -37,15 +37,41 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, t_color *c)
 	*c = col_add(*c, assign_color(rt, lr, n, *c), 0.5f);
 }
 
+static t_color	ray_col(t_rt *rt, float t)
+{
+	t_color		mixer;
+
+	rt->cur_light = 0;
+	rt->r_lght.start = v_add(rt->r_prm.start, \
+		v_mult(rt->r_prm.dir, t));
+	rt->r_lght.dir = rt->r_prm.dir;	//miks r_light.dir on sama kuin r_prm.dir?
+	uv_map(rt, &rt->r_lght);
+	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
+	while (rt->cur_light < rt->light_count)
+	{
+		calculate_lighting(rt, &rt->r_lght, &mixer);
+		rt->cur_light++;
+	}
+//	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
+	mixer = col_blend(mixer, apply_texture(rt), 0.7f);
+	if(rt->mir_hit == TRUE)
+		mixer = col_blend(mixer, rt->mir_image, 0.0);
+	return (mixer);
+}
+
 //this function is called if ray_prime hits mirror object.
 //In such case ray_prime is re-initialized to shoot from the mirror object.
-void	hit_mirror(t_rt *rt, float *t, unsigned int depth)
+void	hit_mirror2(t_rt *rt, float *t, unsigned int depth) //old hit_mirror, too complex
 {
 	unsigned int	i;
 	t_fvector		n;
+	int				old_cur;
 
+	old_cur = rt->curobj;
+	rt->object[rt->curobj].color = (t_color){0.7, 0.7, 0.7};
 	i = 0;
-	rt->r_prm.start = v_add(rt->r_prm.start, v_mult(rt->r_prm.dir, *t));
+	rt->mir_hit = TRUE;
+	rt->r_prm.start = v_add(rt->r_prm.start, (v_mult(rt->r_prm.dir, *t)));
 	n = find_object_normal(&rt->object[rt->curobj], &rt->r_prm);
 	*t = RAY_LIMIT;
 	rt->curobj = -1;
@@ -58,27 +84,31 @@ v_dot(rt->r_prm.dir, n));
 			rt->curobj = i;
 		i++;
 	}
-	if (rt->object[rt->curobj].mirror == 1 && depth > 0)
-		hit_mirror(rt, t, depth--);
+//	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == 1 && depth > 0)
+//		hit_mirror(rt, t, depth--);
+	if (rt->curobj == -1)
+	{
+		rt->curobj = old_cur;
+		rt->object[rt->curobj].color = (t_color){0.1, 0.1, 0.1};
+	}
 }
 
-static t_color	ray_col(t_rt *rt, float t)
+void	hit_mirror(t_rt *rt, float *t)
 {
-	t_color		mixer;
+	unsigned int	i;
+	t_fvector		n;
 
-	rt->cur_light = 0;
-	rt->r_lght.start = v_add(rt->r_prm.start, \
-		v_mult(rt->r_prm.dir, t));
-	rt->r_lght.dir = rt->r_prm.dir;
-	uv_map(rt, &rt->r_lght);
-	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
-	while (rt->cur_light < rt->light_count)
-	{
-		calculate_lighting(rt, &rt->r_lght, &mixer);
-		rt->cur_light++;
-	}
-	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
-	return (mixer);
+	i = 0;
+	rt->r_prm.start = v_add(rt->r_prm.start, (v_mult(rt->r_prm.dir, *t)));
+	n = find_object_normal(&rt->object[rt->curobj], &rt->r_prm);
+	*t = RAY_LIMIT;
+	rt->curobj = -1;
+	rt->r_prm.dir = v_mult(v_mult(v_sub(rt->r_prm.dir, n), 2.0f), \
+v_dot(rt->r_prm.dir, n));
+	v_normalize(rt->r_prm.dir);
+	while (i++ < rt->objcount)
+		if (ray_object_intersect(&rt->r_prm, &rt->object[i], t))
+			rt->curobj = i;
 }
 
 void	raytracer(t_rt *rt, int x, int y)
@@ -89,6 +119,7 @@ void	raytracer(t_rt *rt, int x, int y)
 	ray_trough_screen(rt, x, y);
 	t = RAY_LIMIT;
 	rt->curobj = -1;
+	rt->mir_hit = FALSE;
 	i = 0;
 	while (i < rt->objcount)
 	{
@@ -96,9 +127,12 @@ void	raytracer(t_rt *rt, int x, int y)
 			rt->curobj = i;
 		i++;
 	}
-	if (rt->object[rt->curobj].mirror == 1)
-		hit_mirror(rt, &t, 5);
-	if (draw_light(rt, &t, x, y) || rt->curobj == -1)
+	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == TRUE)
+	{
+		rt->mir_image = ray_col(rt, t);
+		hit_mirror(rt, &t);
+	}
+	if (/*draw_light(rt, &t, x, y) ||*/ rt->curobj == -1/* && rt->mir_hit == FALSE*/)
 		return ;
 	if (rt->is_grayscale)
 		draw_pixel(x, y, &rt->rend.win_buffer, \

@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/30 19:54:20 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/10 11:54:41 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,9 @@ typedef struct s_rt {
 	int			light_count;
 	int			cur_light;
 	float		t_scale;
+	t_bool		mir_hit;
+	t_color		mir_image;
+	SDL_Surface	*surf;
 }				t_rt;
 
 void		draw_pixel(uint32_t x, uint32_t y, t_buffer *buf, uint32_t color);
@@ -117,6 +120,7 @@ t_bool		parse_c_pos(t_rt *rt, char *str);
 uint32_t	convert_to_grayscale(uint32_t c);
 int			create_bmp(char *filename, t_buffer *i);
 //COLOR
+t_color		uint_to_col(uint32_t color);
 uint32_t	col_to_uint(t_color color);
 t_color		col_lerp(t_color c1, t_color c2, float p);
 t_color		col_blend(t_color base, t_color mix, float p);
@@ -126,7 +130,7 @@ t_color		col_add(t_color base, t_color mix, float p);
 //texturing
 void		uv_map(t_rt *rt, t_ray *ray);
 t_color		apply_check_pattern(t_rt *rt, float scale, t_color oc);
-t_color		apply_texture(t_rt *rt, float scale);
+t_color		apply_texture(t_rt *rt);
 //parser
 t_fvector	read_3dvec(char *line);
 t_color		read_color(char *line);
