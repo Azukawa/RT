@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/10 16:53:39 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/12 13:54:39 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ static t_color	ray_col(t_rt *rt, float t)
 	t_color		mixer;
 
 	rt->cur_light = 0;
-	rt->r_lght.start = v_add(rt->r_prm.start, \
-		v_mult(rt->r_prm.dir, t));
+	rt->r_lght.start = v_add(rt->r_prm.start, v_mult(rt->r_prm.dir, t)); // aka hp
 	rt->r_lght.dir = rt->r_prm.dir;	//miks r_light.dir on sama kuin r_prm.dir?
 	uv_map(rt, &rt->r_lght);
+//	exit(0);
 	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
 	while (rt->cur_light < rt->light_count)
 	{

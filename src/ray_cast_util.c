@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:13:52 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/25 19:11:05 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/11 19:26:33 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ray_trough_screen(t_rt *rt, int x, int y)
 {
 	t_ray		ret;
 	t_fvector	pixel;
-
+	
 	ret.start = rt->cam.pos;
 	pixel.x = ft_d_lerp(-1.0, 1.0, (1.0f / WIN_W) * (x + 0.5));
 	pixel.y = ft_d_lerp(-0.75, 0.75, (1.0f / WIN_H) * (y + 0.5));
