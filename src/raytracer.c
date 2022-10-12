@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/12 13:54:39 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/12 21:49:22 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ static t_color	ray_col(t_rt *rt, float t)
 	rt->r_lght.start = v_add(rt->r_prm.start, v_mult(rt->r_prm.dir, t)); // aka hp
 	rt->r_lght.dir = rt->r_prm.dir;	//miks r_light.dir on sama kuin r_prm.dir?
 	uv_map(rt, &rt->r_lght);
-//	exit(0);
 	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
 	while (rt->cur_light < rt->light_count)
 	{
 		calculate_lighting(rt, &rt->r_lght, &mixer);
 		rt->cur_light++;
 	}
-//	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
-	mixer = col_blend(mixer, apply_texture(rt), 0.7f);
+	///here a switch for the texture type
+	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
+//	mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
 	if(rt->mir_hit == TRUE)
 		mixer = col_blend(mixer, rt->mir_image, 0.0);
 	return (mixer);
@@ -129,7 +129,7 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == TRUE)
 	{
-		rt->mir_image = ray_col(rt, t);
+//		rt->mir_image = ray_col(rt, t);
 		hit_mirror(rt, &t);
 	}
 	if (/*draw_light(rt, &t, x, y) ||*/ rt->curobj == -1/* && rt->mir_hit == FALSE*/)

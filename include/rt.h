@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:58:49 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/10 11:54:41 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/12 16:01:02 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ t_color		col_add(t_color base, t_color mix, float p);
 //texturing
 void		uv_map(t_rt *rt, t_ray *ray);
 t_color		apply_check_pattern(t_rt *rt, float scale, t_color oc);
-t_color		apply_texture(t_rt *rt);
+t_color		apply_square_texture(t_rt *rt, float scale);
 //parser
 t_fvector	read_3dvec(char *line);
 t_color		read_color(char *line);

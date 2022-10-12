@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/11 20:38:14 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/12 14:56:08 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ static void	init(t_rt *rt)
 //jos bytes_per_pixel != 4 niin error
 	rt->surf = SDL_LoadBMP("./textures/tex_640x426.bmp");
 //	rt->surf = SDL_LoadBMP("./textures/test_2x2.bmp");
-	if (!rt->surf)
+	if (!rt->surf || SDL_BYTESPERPIXEL(rt->surf->format->format) != 4)
 	{
-		printf("Failed to load texture\n");
+		printf("Failed to load texture. Make sure that .bmp is argb aka bitsperpixel = 4\n");
 		exit(1);
 	}
 
