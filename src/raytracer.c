@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/12 21:49:22 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/12 22:59:46 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,28 @@ static void	calculate_lighting(t_rt *rt, t_ray *ray, t_color *c)
 static t_color	ray_col(t_rt *rt, float t)
 {
 	t_color		mixer;
-
 	rt->cur_light = 0;
 	rt->r_lght.start = v_add(rt->r_prm.start, v_mult(rt->r_prm.dir, t)); // aka hp
 	rt->r_lght.dir = rt->r_prm.dir;	//miks r_light.dir on sama kuin r_prm.dir?
 	uv_map(rt, &rt->r_lght);
-	mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
-	while (rt->cur_light < rt->light_count)
+	if (rt->curobj == -2)
+		mixer = (t_color){0,0,0};
+	else
 	{
-		calculate_lighting(rt, &rt->r_lght, &mixer);
-		rt->cur_light++;
+		mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
+		while (rt->cur_light < rt->light_count)
+		{
+			calculate_lighting(rt, &rt->r_lght, &mixer);
+			rt->cur_light++;
+		}
+		///here a switch for the texture type
+		if(rt->object[rt->curobj].type == PLANE)
+			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
+		else
+			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
 	}
-	///here a switch for the texture type
-	mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
-//	mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
 	if(rt->mir_hit == TRUE)
-		mixer = col_blend(mixer, rt->mir_image, 0.0);
+		mixer = col_blend(mixer, rt->mir_image, 0.15);
 	return (mixer);
 }
 
@@ -97,18 +103,23 @@ void	hit_mirror(t_rt *rt, float *t)
 {
 	unsigned int	i;
 	t_fvector		n;
+	int	precur = rt->curobj;
 
 	i = 0;
+	rt->mir_hit = TRUE;
 	rt->r_prm.start = v_add(rt->r_prm.start, (v_mult(rt->r_prm.dir, *t)));
 	n = find_object_normal(&rt->object[rt->curobj], &rt->r_prm);
 	*t = RAY_LIMIT;
-	rt->curobj = -1;
+	rt->curobj = -2;
 	rt->r_prm.dir = v_mult(v_mult(v_sub(rt->r_prm.dir, n), 2.0f), \
 v_dot(rt->r_prm.dir, n));
-	v_normalize(rt->r_prm.dir);
-	while (i++ < rt->objcount)
-		if (ray_object_intersect(&rt->r_prm, &rt->object[i], t))
+	rt->r_prm.dir = v_normalize(rt->r_prm.dir);
+	while (i < rt->objcount)
+	{	
+		if (precur != i && ray_object_intersect(&rt->r_prm, &rt->object[i], t))
 			rt->curobj = i;
+		i++;
+	}
 }
 
 void	raytracer(t_rt *rt, int x, int y)
@@ -129,7 +140,7 @@ void	raytracer(t_rt *rt, int x, int y)
 	}
 	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == TRUE)
 	{
-//		rt->mir_image = ray_col(rt, t);
+		rt->mir_image = ray_col(rt, t);
 		hit_mirror(rt, &t);
 	}
 	if (/*draw_light(rt, &t, x, y) ||*/ rt->curobj == -1/* && rt->mir_hit == FALSE*/)
