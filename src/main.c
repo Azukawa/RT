@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/12 14:56:08 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 12:40:43 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static void	init(t_rt *rt)
 	if (!rt->rend.win_tex)
 		exit(1);
 //jos bytes_per_pixel != 4 niin error
-	rt->surf = SDL_LoadBMP("./textures/tex_640x426.bmp");
+	rt->surf = SDL_LoadBMP("./textures/wood_square_800x800.bmp");
+//	rt->surf = SDL_LoadBMP("./textures/brick_square_1360x1360.bmp");
+//	rt->surf = SDL_LoadBMP("./textures/tex_640x426.bmp");
 //	rt->surf = SDL_LoadBMP("./textures/test_2x2.bmp");
 	if (!rt->surf || SDL_BYTESPERPIXEL(rt->surf->format->format) != 4)
 	{

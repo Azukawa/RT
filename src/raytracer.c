@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/12 22:59:46 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 12:23:36 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,21 @@ static t_color	ray_col(t_rt *rt, float t)
 	else
 	{
 		mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
+		if(rt->object[rt->curobj].type == PLANE)
+			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
+		else
+			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.9f);
+
 		while (rt->cur_light < rt->light_count)
 		{
 			calculate_lighting(rt, &rt->r_lght, &mixer);
 			rt->cur_light++;
 		}
 		///here a switch for the texture type
-		if(rt->object[rt->curobj].type == PLANE)
-			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
-		else
-			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
+//		if(rt->object[rt->curobj].type == PLANE)
+//			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
+//		else
+//			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
 	}
 	if(rt->mir_hit == TRUE)
 		mixer = col_blend(mixer, rt->mir_image, 0.15);
@@ -99,7 +104,7 @@ v_dot(rt->r_prm.dir, n));
 	}
 }
 
-void	hit_mirror(t_rt *rt, float *t)
+void	hit_mirror(t_rt *rt, float *t, int depth)
 {
 	unsigned int	i;
 	t_fvector		n;
@@ -116,10 +121,13 @@ v_dot(rt->r_prm.dir, n));
 	rt->r_prm.dir = v_normalize(rt->r_prm.dir);
 	while (i < rt->objcount)
 	{	
-		if (precur != i && ray_object_intersect(&rt->r_prm, &rt->object[i], t))
+		if (precur != (int)i && ray_object_intersect(&rt->r_prm, &rt->object[i], t))
 			rt->curobj = i;
 		i++;
 	}
+	if (rt->curobj != -1 && rt->curobj != -2 && rt->object[rt->curobj].mirror == 1 && depth > 0)
+		hit_mirror(rt, t, depth--);
+
 }
 
 void	raytracer(t_rt *rt, int x, int y)
@@ -141,7 +149,7 @@ void	raytracer(t_rt *rt, int x, int y)
 	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == TRUE)
 	{
 		rt->mir_image = ray_col(rt, t);
-		hit_mirror(rt, &t);
+		hit_mirror(rt, &t, 5);
 	}
 	if (/*draw_light(rt, &t, x, y) ||*/ rt->curobj == -1/* && rt->mir_hit == FALSE*/)
 		return ;
