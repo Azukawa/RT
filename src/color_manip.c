@@ -6,24 +6,23 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 21:21:54 by eniini            #+#    #+#             */
-/*   Updated: 2022/10/10 16:39:21 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 19:29:24 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_color		uint_to_col(uint32_t color)
+t_color	uint_to_col(uint32_t color)
 {
 	t_color	ret;
 
 	ret.red = (float)((color >> 16) & 0xFF) / 255.0;
 	ret.green = (float)((color >> 8) & 0xFF) / 255.0;
-    ret.blue = (float)((color) & 0xFF) / 255.0;
+	ret.blue = (float)((color) & 0xFF) / 255.0;
 	return (ret);
 }
 
-
-//convert t_color to ARGB uint for SDL pixel painting
+/*convert t_color to ARGB uint for SDL pixel painting*/
 uint32_t	col_to_uint(t_color color)
 {
 	uint8_t	ir;
@@ -36,7 +35,7 @@ uint32_t	col_to_uint(t_color color)
 	return (255 << 24 | ir << 16 | ig << 8 | ib);
 }
 
-//linear interpolation of two t_color structs.
+/*linear interpolation of two t_color structs.*/
 t_color	col_lerp(t_color c1, t_color c2, float p)
 {
 	t_color	result;

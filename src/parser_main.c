@@ -6,25 +6,17 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 15:48:00 by eniini            #+#    #+#             */
-/*   Updated: 2022/10/13 15:02:56 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 20:44:51 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-void		init_tex(t_object *object, char *line)
+void	init_mirror_and_tex(t_object *object, char *ptr)
 {
-	char	*ptr;
-
-	object->tx_type = NON;
-	if (!line || *line == '\0')
-		return ;
-	ptr = line + 1;
-	if (*ptr == 't' && object->type == PLANE)
-		object->tx_type = TEX;
-	if (*ptr == 'c' && (object->type == PLANE || object->type == SPHERE) && object->mirror == 0){
-		object->tx_type = CHECK;
-	}
+	init_mirror(object, ptr);
+	ptr = ft_strchr(ptr + 1, ' ');
+	init_tex(object, ptr);
 }
 
 /*
@@ -59,9 +51,7 @@ static void	init_object(t_rt *rt, char *ptr, char c, int obj_n)
 		init_cyl(&rt->object[obj_n], pos, dir, read_color(ptr));
 	if (c == 'v')
 		init_cone(&rt->object[obj_n], pos, dir, read_color(ptr));
-	init_mirror(&rt->object[obj_n], ptr);
-	ptr = ft_strchr(ptr + 1, ' ');
-	init_tex(&rt->object[obj_n], ptr);
+	init_mirror_and_tex(&rt->object[obj_n], ptr);
 }
 
 /*

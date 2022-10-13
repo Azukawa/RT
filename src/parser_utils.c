@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/10/13 15:20:26 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 18:47:19 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,21 +99,9 @@ void	read_cam(t_rt *rt, char *line)
 	rt->cam.rot = lookat;
 	rt->redraw = TRUE;
 	ptr = ft_strchr(ptr + 1, ' ');
-	if (ptr)
-		rt->amb_col = read_color(ptr);
-	else
-	{
-		ft_printf("no ambient light set!\n");
-		rt->amb_col = (t_color){0, 0, 0};
-	}
+	set_color(&rt->amb_col, ptr);
 	ptr = ft_strchr(ptr + 1, ' ');
-	if (ptr)
-		rt->t_scale = ft_clamp_d(ft_atof(ptr), 1, 200);
-	else
-	{
-		ft_printf("no texture scale set! Set to 25\n");
-		rt->t_scale = 25;
-	}
+	set_scale(&rt->t_scale, ptr);
 	rt->light[0].pos = rt->cam.pos;
 	rt->light[0].color = (t_color){1, 1, 1};
 }

@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 14:46:55 by alero             #+#    #+#             */
-/*   Updated: 2022/10/13 15:17:26 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 20:45:12 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,41 @@ void	init_mirror(t_object *object, char *line)
 	ptr = line + 1;
 	if (*ptr == 'm')
 		object->mirror = 1;
+}
+
+void	init_tex(t_object *object, char *line)
+{
+	char	*ptr;
+
+	object->tx_type = NON;
+	if (!line || *line == '\0')
+		return ;
+	ptr = line + 1;
+	if (*ptr == 't' && object->type == PLANE)
+		object->tx_type = TEX;
+	if (*ptr == 'c' && (object->type == PLANE
+			|| object->type == SPHERE) && object->mirror == 0)
+		object->tx_type = CHECK;
+}
+
+void	set_color(t_color *color, char *ptr)
+{
+	if (ptr)
+		*color = read_color(ptr);
+	else
+	{
+		ft_printf("no ambient light set!\n");
+		*color = (t_color){0, 0, 0};
+	}
+}
+
+void	set_scale(float *scale, char *ptr)
+{
+	if (ptr)
+		*scale = ft_clamp_d(ft_atof(ptr), 1, 200);
+	else
+	{
+		ft_printf("no texture scale set! Set to 25\n");
+		*scale = 25;
+	}
 }

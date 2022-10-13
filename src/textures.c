@@ -6,51 +6,11 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/10/13 15:25:53 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 19:54:34 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
-
-t_color		apply_square_texture(t_rt *rt, float scale)
-{
-	unsigned int	t_w = rt->surf->w;
-	unsigned int	t_h = rt->surf->h;
-	unsigned int	tex_x;
-	unsigned int	tex_y;
-
-	scale = scale / 10;
-	rt->uv_u = fmodf(rt->uv_u, scale) + scale;
-	tex_x = fmodf(rt->uv_u / scale * t_w, t_w);
-	rt->uv_v = fmodf(rt->uv_v, scale) + scale;
-	tex_y = fmodf(rt->uv_v / scale * t_h, t_h);
-	return (uint_to_col(((uint32_t *)rt->surf->pixels)[(tex_x + tex_y * t_w)]));
-}
-
-/*
-*	Returns a color corresponding to a checkered pattern. [Scale] directly
-*	corresponds to how many tiles are generated onto the plane.
-*/
-t_color		apply_check_pattern(t_rt *rt, float scale, t_color oc)
-{
-	t_bool	resx;
-	t_bool	resy;
-
-	resx = FALSE;
-	resy = FALSE;
-	if (rt->object[rt->curobj].type == CONE || rt->object[rt->curobj].type == CYL || rt->object[rt->curobj].mirror)
-		return (oc);
-	if (rt->object[rt->curobj].type == PLANE)
-		scale = scale / 25;
-	if (((rt->uv_u * scale) - floorf(rt->uv_u * scale)) < 0.5f)
-		resx = TRUE;
-	if (((rt->uv_v * scale) - floorf(rt->uv_v * scale)) < 0.5f)
-		resy = TRUE;
-	if (resy ^ resx)
-		return (col_lerp(oc, (t_color){0, 0, 0}, 0.5f));
-	else
-		return (oc);
-}
 
 /*
 *	Were translating a Cartesian coordinate into spherical coordinate into an
@@ -79,7 +39,7 @@ static void	planar_map(t_rt *rt, t_fvector hp)
 
 	n = rt->object[rt->curobj].dir;
 	e1 = v_cross(n, (t_fvector){0, -1, 0, 0});
-	if(e1.x == 0 && e1.x == 0 && e1.z == 0)
+	if (e1.x == 0 && e1.x == 0 && e1.z == 0)
 		e1.x += 0.000000001;
 	e1 = v_normalize(e1);
 	e2 = v_normalize(v_cross(n, e1));
@@ -89,9 +49,9 @@ static void	planar_map(t_rt *rt, t_fvector hp)
 
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
-	float	theta;
+	float		theta;
 	t_fvector	dir;
-	
+
 	dir = rt->object[rt->curobj].dir;
 	pos = v_rot_xyz(pos, dir);
 	theta = atan2f(pos.x, pos.z);

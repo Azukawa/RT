@@ -21,6 +21,7 @@ SRC_LIST = draw_pixel.c \
 		color_manip.c \
 		color_manip2.c \
 		textures.c \
+		textures2.c \
 		parser_main.c \
 		parser_utils.c \
 		parser_shapes.c \
