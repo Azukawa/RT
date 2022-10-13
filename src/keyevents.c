@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/09/26 23:14:53 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 15:24:17 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	check_keyevents(t_rt *rt, SDL_Event *e)
 		rt->is_grayscale = FALSE;
 	else if (e->key.keysym.sym == SDLK_g && !rt->is_grayscale)
 		rt->is_grayscale = TRUE;
+	/*
 	if (e->key.keysym.sym == SDLK_m && rt->amb_p < AMBIENT_MAX)
 		rt->amb_p += 0.05f;
 	if (e->key.keysym.sym == SDLK_n && rt->amb_p > AMBIENT_MIN)
@@ -38,6 +39,7 @@ static void	check_keyevents(t_rt *rt, SDL_Event *e)
 		rt->amb_int += 0.05f;
 	if (e->key.keysym.sym == SDLK_b && rt->amb_int > AMBIENT_MIN)
 		rt->amb_int -= 0.05f;
+	*/
 }
 
 void	keyevent(t_rt *rt, SDL_Event *e)

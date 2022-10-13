@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/13 12:40:43 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 15:21:42 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,13 @@ static void	init(t_rt *rt)
 		SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIN_W, WIN_H);
 	if (!rt->rend.win_tex)
 		exit(1);
-//jos bytes_per_pixel != 4 niin error
-	rt->surf = SDL_LoadBMP("./textures/wood_square_800x800.bmp");
-//	rt->surf = SDL_LoadBMP("./textures/brick_square_1360x1360.bmp");
-//	rt->surf = SDL_LoadBMP("./textures/tex_640x426.bmp");
-//	rt->surf = SDL_LoadBMP("./textures/test_2x2.bmp");
+	rt->surf = SDL_LoadBMP("./textures/texture.bmp");
 	if (!rt->surf || SDL_BYTESPERPIXEL(rt->surf->format->format) != 4)
 	{
 		printf("Failed to load texture. Make sure that .bmp is argb aka bitsperpixel = 4\n");
+		printf("%d\n\n", SDL_BYTESPERPIXEL(rt->surf->format->format));
 		exit(1);
 	}
-
-	printf("%d\n\n", SDL_BYTESPERPIXEL(rt->surf->format->format));
-	printf("%p\n", rt->surf->pixels);
 	rt->rend.run = TRUE;
 	rt->amb_col = (t_color){1, 1, 1};
 }

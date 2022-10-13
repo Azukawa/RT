@@ -6,7 +6,7 @@
 /*   By: alero <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 15:20:56 by alero             #+#    #+#             */
-/*   Updated: 2022/10/12 21:31:18 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 15:25:53 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,9 @@ static void	planar_map(t_rt *rt, t_fvector hp)
 static void	cylindrical_map(t_rt *rt, t_fvector pos)
 {
 	float	theta;
-	t_fvector	n, dir;
+	t_fvector	dir;
 	
 	dir = rt->object[rt->curobj].dir;
-//	dir = (t_fvector){RAD_TO_DEG * dir.x, RAD_TO_DEG * dir.y, RAD_TO_DEG * dir.z};
 	pos = v_rot_xyz(pos, dir);
 	theta = atan2f(pos.x, pos.z);
 	rt->uv_u = 1.0f - (theta / (2.0f * M_PI) + 0.5f);

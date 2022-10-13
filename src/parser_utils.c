@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 19:38:04 by eniini            #+#    #+#             */
-/*   Updated: 2022/10/09 18:19:31 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 15:20:26 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	read_cam(t_rt *rt, char *line)
 	}
 	ptr = ft_strchr(ptr + 1, ' ');
 	if (ptr)
-		rt->t_scale = ft_atof(ptr);
+		rt->t_scale = ft_clamp_d(ft_atof(ptr), 1, 200);
 	else
 	{
 		ft_printf("no texture scale set! Set to 25\n");

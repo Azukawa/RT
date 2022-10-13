@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 20:41:45 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/13 12:23:36 by alero            ###   ########.fr       */
+/*   Updated: 2022/10/13 14:11:04 by alero            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ static t_color	ray_col(t_rt *rt, float t)
 	else
 	{
 		mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
-		if(rt->object[rt->curobj].type == PLANE)
+		if(rt->object[rt->curobj].tx_type == TEX)
 			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
-		else
+		else if (rt->object[rt->curobj].tx_type == CHECK)
 			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.9f);
 
 		while (rt->cur_light < rt->light_count)
@@ -59,51 +59,14 @@ static t_color	ray_col(t_rt *rt, float t)
 			calculate_lighting(rt, &rt->r_lght, &mixer);
 			rt->cur_light++;
 		}
-		///here a switch for the texture type
-//		if(rt->object[rt->curobj].type == PLANE)
-//			mixer = col_blend(mixer, apply_square_texture(rt, rt->t_scale), 0.2f);
-//		else
-//			mixer = col_blend(mixer, apply_check_pattern(rt, rt->t_scale, mixer), 0.7f);
 	}
 	if(rt->mir_hit == TRUE)
 		mixer = col_blend(mixer, rt->mir_image, 0.15);
 	return (mixer);
 }
 
-//this function is called if ray_prime hits mirror object.
-//In such case ray_prime is re-initialized to shoot from the mirror object.
-void	hit_mirror2(t_rt *rt, float *t, unsigned int depth) //old hit_mirror, too complex
-{
-	unsigned int	i;
-	t_fvector		n;
-	int				old_cur;
-
-	old_cur = rt->curobj;
-	rt->object[rt->curobj].color = (t_color){0.7, 0.7, 0.7};
-	i = 0;
-	rt->mir_hit = TRUE;
-	rt->r_prm.start = v_add(rt->r_prm.start, (v_mult(rt->r_prm.dir, *t)));
-	n = find_object_normal(&rt->object[rt->curobj], &rt->r_prm);
-	*t = RAY_LIMIT;
-	rt->curobj = -1;
-	rt->r_prm.dir = v_mult(v_mult(v_sub(rt->r_prm.dir, n), 2.0f), \
-v_dot(rt->r_prm.dir, n));
-	v_normalize(rt->r_prm.dir);
-	while (i < rt->objcount)
-	{	
-		if (ray_object_intersect(&rt->r_prm, &rt->object[i], t))
-			rt->curobj = i;
-		i++;
-	}
-//	if (rt->curobj != -1 && rt->object[rt->curobj].mirror == 1 && depth > 0)
-//		hit_mirror(rt, t, depth--);
-	if (rt->curobj == -1)
-	{
-		rt->curobj = old_cur;
-		rt->object[rt->curobj].color = (t_color){0.1, 0.1, 0.1};
-	}
-}
-
+/*this function is called if ray_prime hits mirror object.
+In such case ray_prime is re-initialized to shoot from the mirror object.*/
 void	hit_mirror(t_rt *rt, float *t, int depth)
 {
 	unsigned int	i;
