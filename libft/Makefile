@@ -183,7 +183,7 @@ $(PFTOBJDIR)/%.o:%.c
 $(GFXOJBDIR)/%.o:%.c
 	@mkdir -p $(GFXOJBDIR)
 	@printf "$(PURPLE)."
-	@$(CC) -lm $(CFLAGS) -o $@ -c $< -I$(INCDIR)
+	@$(CC) $(CFLAGS) -o $@ -c $< -I$(INCDIR)
 
 #compile each library separately
 $(NAME): $(OBJS)
