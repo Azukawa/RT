@@ -54,7 +54,10 @@ void	init_tex(t_object *object, char *line)
 		return ;
 	ptr = line + 1;
 	if (*ptr == 't' && object->type == PLANE)
+	{
 		object->tx_type = TEX;
+		object->color = (t_color){0, 0, 0};
+	}
 	if (*ptr == 'c' && (object->type == PLANE
 			|| object->type == SPHERE) && object->mirror == 0)
 		object->tx_type = CHECK;

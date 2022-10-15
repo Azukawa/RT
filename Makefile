@@ -2,7 +2,7 @@ NAME	=	RT
 
 #compiler
 CC	=	gcc
-LFLAGS	=	-Wall -Wextra -O3 -g #-Werror
+LFLAGS	=	-Wall -Wextra -O3 -g -Werror
 
 #sources & object files
 SRC_DIR =	./src/
@@ -32,6 +32,7 @@ SRC_LIST = draw_pixel.c \
 SRCS = $(addprefix $(SRC_DIR),$(SRC_LIST))
 OBJS = $(addprefix $(OBJ_DIR),$(SRC_LIST:.c=.o))
 
+INCS = -Iinclude/ -Ilibft/includes -I$(SDL_DIR)/include/SDL2
 #libft
 LIBFT = libft/libft.a
 LFT_LINK = -L./libft -lft
@@ -49,7 +50,7 @@ all: $(LIBFT) $(SDL) $(NAME)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(LFLAGS) -Iinclude/ -Ilibft/includes -I$(SDL_DIR)/include/SDL2 -o $@ -c $<
+	$(CC) $(LFLAGS) $(INCS) -o $@ -c $<
 
 $(LIBFT):
 	make -C libft
@@ -61,7 +62,7 @@ $(SDL):
 	cd $(SDL_SRC_DIR); ./configure --prefix=$(SDL_BUILD_DIR_PATH); make -j6; make install
 
 $(NAME): $(OBJS)
-	$(CC) $(OBJS) $(SDL_CFLAGS) $(LFT_LINK) -lm -o $(NAME)
+	$(CC) $(INCS) $(LFT_LINK) -lm  $(SDL_CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)

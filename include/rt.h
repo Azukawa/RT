@@ -22,8 +22,8 @@
 //RTv1
 # include "defines.h"
 //libft
-# include "../libft/includes/libft.h"
-# include "../libft/includes/ft_gfx.h"
+# include "libft.h"
+# include "ft_gfx.h"
 
 typedef struct s_object{
 	t_fvector	pos;

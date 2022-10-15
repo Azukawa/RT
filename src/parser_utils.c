@@ -108,9 +108,14 @@ void	read_cam(t_rt *rt, char *line)
 
 void	read_objcount(t_rt *rt, char *line)
 {
-	rt->objcount = ft_atoi(line);
+	rt->objcount = ft_abs(ft_atoi(line));
 	if (!rt->objcount)
 		ft_getout("Invalid object count declaration!");
+	if (rt->objcount > 200)
+	{
+		rt->objcount = 200;
+		ft_printf("Too many objects! Capped to 200 for smooth operation.\n");
+	}
 	rt->object = (t_object *)malloc(sizeof(t_object) * rt->objcount);
 	ft_bzero(rt->object, sizeof(t_object) * rt->objcount);
 	if (!rt->object)

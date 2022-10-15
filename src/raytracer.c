@@ -51,9 +51,9 @@ static t_color	ray_col(t_rt *rt, float t)
 		uv_map(rt, &rt->r_lght);
 		mixer = col_mult_colors(rt->object[rt->curobj].color, rt->amb_col);
 		if (rt->object[rt->curobj].tx_type == TEX)
-			mixer = col_blend(mixer, apply_sqr_tex(rt, rt->t_scale), 0.2f);
+			mixer = col_blend(mixer, apply_sqr_tex(rt, rt->t_scale), 0.7f);
 		else if (rt->object[rt->curobj].tx_type == CHECK)
-			mixer = col_blend(mixer, apply_check(rt, rt->t_scale, mixer), 0.9f);
+			mixer = col_blend(mixer, apply_check(rt, rt->t_scale, mixer), 0.7f);
 		while (rt->cur_light < rt->light_count)
 		{
 			calculate_lighting(rt, &rt->r_lght, &mixer);
