@@ -28,7 +28,7 @@ void	init_light(t_rt *rt, char *line)
 		rt->light[rt->light_count].r = 0.5;
 		rt->light[rt->light_count].pos = pos;
 		rt->light[rt->light_count].color = read_color(ptr);
-		printf("light_count = %d\n", rt->light_count);
+		ft_printf("light_count = %d\n", rt->light_count);
 		rt->light_count++;
 	}
 }
