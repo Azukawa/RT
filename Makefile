@@ -16,7 +16,7 @@ SRC_LIST = draw_pixel.c \
 		ray_cast_util.c \
 		vector_rotation.c \
 		raytracer.c \
-		grayscale.c \
+		filters.c \
 		bmp_screencap.c \
 		color_manip.c \
 		color_manip2.c \

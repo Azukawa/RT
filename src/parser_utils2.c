@@ -28,7 +28,6 @@ void	init_light(t_rt *rt, char *line)
 		rt->light[rt->light_count].r = 0.5;
 		rt->light[rt->light_count].pos = pos;
 		rt->light[rt->light_count].color = read_color(ptr);
-		ft_printf("light_count = %d\n", rt->light_count);
 		rt->light_count++;
 	}
 }
@@ -56,7 +55,7 @@ void	init_tex(t_object *object, char *line)
 	if (*ptr == 't' && object->type == PLANE)
 	{
 		object->tx_type = TEX;
-		object->color = (t_color){0, 0, 0};
+		object->color = (t_color){0.8, 0.8, 0.6};
 	}
 	if (*ptr == 'c' && (object->type == PLANE
 			|| object->type == SPHERE) && object->mirror == 0)
@@ -69,7 +68,7 @@ void	set_color(t_color *color, char *ptr)
 		*color = read_color(ptr);
 	else
 	{
-		ft_printf("no ambient light set!\n");
+		write(1, "no ambient light set!\n", 23);
 		*color = (t_color){0, 0, 0};
 	}
 }
@@ -80,7 +79,7 @@ void	set_scale(float *scale, char *ptr)
 		*scale = ft_clamp_d(ft_atof(ptr), 1, 200);
 	else
 	{
-		ft_printf("no texture scale set! Set to 25\n");
+		write(1, "no texture scale set! Set to 25\n", 33);
 		*scale = 25;
 	}
 }

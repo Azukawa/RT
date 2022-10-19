@@ -24,8 +24,9 @@
 */
 
 #include "rt.h"
-
-//file I/O
+/*
+**file I/O
+*/
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>

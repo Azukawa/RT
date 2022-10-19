@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "rt.h"
-
-//This function subtracts  t_fvector b from t_fvector a
+/*
+**This function subtracts  t_fvector b from t_fvector a
+*/
 t_fvector	v_sub(t_fvector a, t_fvector b)
 {
 	t_fvector	ret;

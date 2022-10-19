@@ -31,9 +31,8 @@ static void	init(t_rt *rt)
 	rt->surf = SDL_LoadBMP("./textures/texture.bmp");
 	if (!rt->surf || SDL_BYTESPERPIXEL(rt->surf->format->format) != 4)
 	{
-		ft_printf("Failed to load texture. Make sure that .bmp is \
-				argb aka bitsperpixel = 4\n");
-		ft_printf("%d\n\n", SDL_BYTESPERPIXEL(rt->surf->format->format));
+		write(1, "Failed to load texture. ", 25);
+		write(1, "Make sure that .bmp is argb aka bitsperpixel = 4\n", 50);
 		exit(1);
 	}
 	rt->rend.run = TRUE;

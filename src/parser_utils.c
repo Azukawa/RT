@@ -114,10 +114,10 @@ void	read_objcount(t_rt *rt, char *line)
 	if (rt->objcount > 200)
 	{
 		rt->objcount = 200;
-		ft_printf("Too many objects! Capped to 200 for smooth operation.\n");
+		write(1, "Too many objects! Capped to 200 for smooth operation.\n", 55);
 	}
 	rt->object = (t_object *)malloc(sizeof(t_object) * rt->objcount);
-	ft_bzero(rt->object, sizeof(t_object) * rt->objcount);
 	if (!rt->object)
 		ft_getout("Failed to allocate memory for objects.");
+	ft_bzero(rt->object, sizeof(t_object) * rt->objcount);
 }

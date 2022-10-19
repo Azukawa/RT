@@ -50,7 +50,7 @@ t_color	col_lerp(t_color c1, t_color c2, float p)
 	return (result);
 }
 
-//mix/blend two colors together
+/*mix/blend two colors together*/
 t_color	col_blend(t_color base, t_color mix, float p)
 {
 	t_color	result;

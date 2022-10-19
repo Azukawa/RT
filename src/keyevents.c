@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:37 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/13 19:29:38 by esukava          ###   ########.fr       */
+/*   Updated: 2022/10/16 14:31:14 by esukava          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ static void	check_keyevents(t_rt *rt, SDL_Event *e)
 		rt->light[0].pos.y += 5;
 	if (e->key.keysym.sym == SDLK_e)
 		rt->light[0].pos.y -= 5;
-	if (e->key.keysym.sym == SDLK_g && rt->is_grayscale)
-		rt->is_grayscale = FALSE;
-	else if (e->key.keysym.sym == SDLK_g && !rt->is_grayscale)
-		rt->is_grayscale = TRUE;
+	if (e->key.keysym.sym == SDLK_g)
+		rt->col_switch++;
 }
 
 void	keyevent(t_rt *rt, SDL_Event *e)
@@ -42,7 +40,7 @@ void	keyevent(t_rt *rt, SDL_Event *e)
 			if (e->key.keysym.sym == SDLK_ESCAPE)
 				rt->rend.run = FALSE;
 			if (e->key.keysym.sym == SDLK_p)
-				create_bmp("RT screencap.bmp", &rt->rend.win_buffer);
+				create_bmp("RTscreencap.bmp", &rt->rend.win_buffer);
 		}
 		else if (e->type == SDL_WINDOWEVENT \
 		&& e->window.event == SDL_WINDOWEVENT_CLOSE)

@@ -75,7 +75,7 @@ typedef struct s_rt {
 	uint		objcount;
 	t_object	light[10];
 	t_color		colors[10];
-	t_bool		is_grayscale;
+	uint		col_switch;
 	int			curobj;
 	int			light_count;
 	int			cur_light;
@@ -116,7 +116,7 @@ t_fvector	find_object_normal(t_object *object, t_ray *ray);
 void		raytracer(t_rt *rt, int x, int y);
 t_bool		parse_c_dir(t_rt *rt, char *str);
 t_bool		parse_c_pos(t_rt *rt, char *str);
-uint32_t	convert_to_grayscale(uint32_t c);
+uint32_t	convert_to(uint32_t c, uint *i);
 int			create_bmp(char *filename, t_buffer *i);
 //COLOR
 t_color		uint_to_col(uint32_t color);

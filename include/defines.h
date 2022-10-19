@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 20:56:17 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/13 14:07:56 by esukava          ###   ########.fr       */
+/*   Updated: 2022/10/16 14:54:18 by esukava          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define DEFINES_H
 
 //WINDOW
-# define WIN_W	800
-# define WIN_H	600
-# define WIN_HW 400
-# define WIN_HH 300
+# define WIN_W	1440
+# define WIN_H	1080
+# define WIN_HW 720
+# define WIN_HH 540
 # define WIN_NAME	"esukava/eniini interactive raytracer ver. 0.25"
 
 # define ROUGHNESS		120.0f
@@ -29,6 +29,8 @@
 
 # define DEG_TO_RAD 0.01745329251
 # define RAD_TO_DEG 57.2957795131
+
+# define SHAD_BIAS 0.001
 
 enum e_type {
 	SPHERE,
