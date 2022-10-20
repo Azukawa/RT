@@ -2,7 +2,7 @@ NAME	=	RT
 
 #compiler
 CC	=	gcc
-LFLAGS	=	-Wall -Wextra -O3 -g -Werror
+LFLAGS	=	-Wall -Wextra -O3 -Werror
 
 #sources & object files
 SRC_DIR =	./src/
