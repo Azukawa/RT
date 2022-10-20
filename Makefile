@@ -72,6 +72,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(SDL_SRC_DIR)
+	rm -rf $(SDL_DIR)
 	make fclean -C libft
 
 re: fclean all
