@@ -6,7 +6,7 @@
 /*   By: eniini <eniini@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 21:12:47 by esukava           #+#    #+#             */
-/*   Updated: 2022/10/13 18:03:38 by esukava          ###   ########.fr       */
+/*   Updated: 2022/11/02 13:49:51 by esukava          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,46 @@ void	draw_to_window(t_rt *rt)
 	SDL_RenderPresent(rt->rend.renderer);
 }
 
+char	*name_screenshot(char *str, int i)
+{
+		char *ret;
+		char *end = ".bmp";
+		char *nbr = NULL;
+		nbr = ft_memalloc(ft_strlen("000"));
+		if (i < 10)
+			nbr = ft_strjoin("00", ft_itoa(i));
+		else if (i < 100)
+			nbr = ft_strjoin("0", ft_itoa(i));
+		else if (i < 1000)
+			nbr = ft_itoa(i);
+
+		ret = ft_strjoin(str, nbr);
+		ret = ft_strjoin(ret, end);
+		return(ret);
+
+}
+
+void	update_scene(t_rt *rt)
+{
+		static int i;
+
+		rt->redraw = TRUE;
+		if (i < 120)
+		{
+		//	rt->cam.pos.x = rt->cam.pos.x + 0.5;
+			rt->cam.pos = v_rot_xyz(rt->cam.pos, (t_fvector){0, 0, 3, 0});
+		//	rt->light[0].pos = v_rot_xyz(rt->light[0].pos, (t_fvector){0, 0, 3, 0});
+		//	rt->cam.dir = v_normalize(v_sub(rt->cam.pos, rt->object[0].pos));
+		//	rt->cam.rot = v_normalize(v_sub(rt->object[0].pos, rt->cam.pos));
+			rt->cam.rot.z = rt->cam.rot.z + 3;
+
+			create_bmp(name_screenshot("screenshots/screenshot_", i), &rt->rend.win_buffer);
+			i++;
+		}
+		else
+			exit(0);
+}
+
 static void	loop(t_rt	*rt)
 {
 	SDL_Event	e;
@@ -84,6 +124,7 @@ static void	loop(t_rt	*rt)
 		rt->redraw = FALSE;
 		draw_to_window(rt);
 	}
+	update_scene(rt);
 }
 
 int	main(int argc, char **argv)

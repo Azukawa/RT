@@ -154,5 +154,6 @@ void		init_mirror(t_object *object, char *line);
 void		init_light(t_rt *rt, char *line);
 t_color		assign_color(t_rt *rt, t_ray lray, t_fvector n, t_color mix);
 t_bool		in_shadow(t_rt *rt, t_ray light_ray, t_fvector dist);
+void		update_scene(t_rt *rt);
 
 #endif
