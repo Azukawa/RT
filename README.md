@@ -1,8 +1,5 @@
-<!-- https://user-images.githubusercontent.com/69463261/200558814-65bdb68c-2a72-4c81-8cf8-d635a0bd19cc.mp4 -->
+ ![demo](RT-animation.webp)
 
-<video autoplay="true" loop="loop" muted="muted" plays-inline="true">
-  <source src="https://user-images.githubusercontent.com/69463261/200558814-65bdb68c-2a72-4c81-8cf8-d635a0bd19cc.mp4">
-</video>
 
 # RT
 RT-raytracer project for Hive
