@@ -7,8 +7,8 @@ RT-raytracer project for Hive Helsinki.
 
 Made by Esukava and Eniini, returned by Esukava.
 
-Minimalistic Raytracer program written in C, that simulates light and shadow in space.
-This multi-month-spanning project was the final excercise in of my core studies in Hive Helsinki.
+Minimalistic Raytracer program written in C, that simulates light and shadow in space.<br>
+This multi-month-spanning project was the final excercise in of my core studies in Hive Helsinki.<br>
 Learned alot about math, algebra and a big project.<br>
 Usage: the program will draw a 3d view of a scene that the user gives it as a parameter.<br>
 
